@@ -54,11 +54,6 @@ export default function SignUp() {
             <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
               Password
             </label>
-            <div className="text-sm">
-              <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                Forgot password?
-              </a>
-            </div>
           </div>
           <div className="mt-2">
             <input
@@ -85,7 +80,7 @@ export default function SignUp() {
       <p className="mt-10 text-center text-sm text-gray-500">
           Already an account?{' '}
           <Link to="/sign-in" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-            Sign Up
+            Sign In
           </Link>
         </p>
     </div>
