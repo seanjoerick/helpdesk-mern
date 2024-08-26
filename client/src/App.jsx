@@ -5,7 +5,8 @@ import SignUp from './pages/SignUp';
 import Navigation from './components/Navigation'; 
 import Profile from './pages/Profile';
 import Account from './pages/Account';
-import AdminDashBoard from './pages/AdminDashboard'
+import AdminDashBoard from './pages/AdminDashboard';
+import Settings from './pages/Settings';
 export default function App() {
   return (
     <BrowserRouter>
@@ -19,6 +20,7 @@ export default function App() {
           <Route path='/' element={<Home />} />
           <Route path='admin-dashboard' element={<AdminDashBoard />} />
           <Route path='accounts' element={<Account />} />
+          <Route path='settings' element={<Settings />} />
           <Route path='profile' element={<Profile />} />
         </Route>
       </Routes>

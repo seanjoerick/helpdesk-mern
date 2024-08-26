@@ -6,7 +6,8 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Dashboard', href: '/admin-dashboard' },
-  { name: 'Accounts', href: '/accounts' }
+  { name: 'Accounts', href: '/accounts' },
+  { name: 'Settings', href: '/settings' },
 ];
 
 function classNames(...classes) {
