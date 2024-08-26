@@ -3,25 +3,32 @@ import bcryptjs from 'bcryptjs';
 import { errorHandler } from '../utils/error.js';
 
 export const signup = async (req, res, next) => {
-    const { departments, username, email, password, role} = req.body;
-    const userRole = role || 'user'; 
+    const { departments, username, email, password, roles } = req.body;
+    const userRole = roles || 'user'; 
 
-    if(!username || !departments || !email || !password) {
-       next(errorHandler(400, 'All fields are required'));
+    if (!username || !email || !password || !departments) {
+        return next(errorHandler(400, 'All fields are required'));
     }
 
     try {
-        const existingUser = await User.findOne({email});
-        if(existingUser) {
-            next(errorHandler(400, 'User already exists!'));    
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return next(errorHandler(400, 'User already exists!'));    
         }
-        const hashedpassword = bcryptjs.hashSync(password, 10);
 
-        const newUser = new User ({departments, username, email, role: [userRole], password: hashedpassword});
+        const hashedPassword = bcryptjs.hashSync(password, 10);
+        const newUser = new User({
+            departments,
+            username,
+            email,
+            roles: [userRole],
+            password: hashedPassword
+        });
 
         await newUser.save();
-        res.status(201).json({message: 'User Created sucessfully', user: newUser });
+        res.status(201).json({ message: 'User created successfully', user: newUser });
     } catch (error) {
-        next(error)
+        next(error);
     }
 }
+
