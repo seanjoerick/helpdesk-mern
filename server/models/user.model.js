@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     enum: ['techsupport', 'user'], 
     required: true
   }],
-  departments: [{
+  department: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Department'
   }]

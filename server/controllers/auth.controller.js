@@ -1,12 +1,13 @@
 import User from '../models/user.model.js';
+import Department from '../models/department.model.js'; // Import the Department model
 import bcryptjs from 'bcryptjs';
 import { errorHandler } from '../utils/error.js';
 
 export const signup = async (req, res, next) => {
-    const { departments, username, email, password, roles } = req.body;
+    const { department, username, email, password, roles } = req.body;
     const userRole = roles || 'user'; 
 
-    if (!username || !email || !password || !departments) {
+    if (!username || !email || !password || !department) {
         return next(errorHandler(400, 'All fields are required'));
     }
 
@@ -16,9 +17,14 @@ export const signup = async (req, res, next) => {
             return next(errorHandler(400, 'User already exists!'));    
         }
 
+        const validDepartment = await Department.findById(department);
+        if (!validDepartment) {
+            return next(errorHandler(400, 'Invalid department ID.'));
+        }
+
         const hashedPassword = bcryptjs.hashSync(password, 10);
         const newUser = new User({
-            departments,
+            department, 
             username,
             email,
             roles: [userRole],
@@ -31,4 +37,3 @@ export const signup = async (req, res, next) => {
         next(error);
     }
 }
-

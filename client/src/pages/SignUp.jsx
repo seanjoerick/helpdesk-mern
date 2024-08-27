@@ -5,7 +5,7 @@ import axios from 'axios';
 export default function SignUp() {
   const [departments, setDepartments] = useState([]);
   const [formData, setFormData] = useState({
-    department: '',
+    department: '', 
     username: '',
     email: '',
     password: ''
@@ -32,7 +32,20 @@ export default function SignUp() {
     }));
   };
   console.log(formData)
-  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('/server/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -47,32 +60,32 @@ export default function SignUp() {
       </div>
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6">
-          <div className="mt-4">
-            <label htmlFor="department" className="block text-sm font-medium leading-6 text-gray-900">
-              Department
-            </label>
-            <div className="mt-2">
-              <select
-                id="department"
-                name="department"
-                value={formData.department}
-                onChange={handleChange}
-                required
-                autoComplete="department-name"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              >
-                <option value="" disabled hidden>
-                  Select a department
-                </option>
-                {departments.map(department => (
-                  <option key={department._id} value={department.name}>
-                    {department.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+        <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="mt-4">
+  <label htmlFor="department" className="block text-sm font-medium leading-6 text-gray-900">
+    Department
+  </label>
+  <div className="mt-2">
+    <select
+      id="department"
+      name="department"
+      value={formData.department}
+      onChange={handleChange}
+      required
+      autoComplete="department-name"
+      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+    >
+      <option value="" disabled hidden>
+        Select a department
+      </option>
+      {departments.map(department => (
+        <option key={department._id} value={department._id}>
+          {department.name}
+        </option>
+      ))}
+    </select>
+  </div>
+</div>
               
           <div>
             <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
