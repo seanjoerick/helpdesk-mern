@@ -35,7 +35,7 @@ export default function Navigation({ currentUser }) {
                   <Link to='/'>
                   <img
                     alt="Help desk"
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRutKU6eF8OzgCGGCsn-TAWPAT9LnPNwYzlMmJg5AeRoqnKlwTKhnnJcnLBog&s"
+                    src="https://images.stockcake.com/public/c/3/2/c3269d7d-a4b5-4f07-b98e-74b0fff0ee85_large/customer-service-professional-stockcake.jpg"
                     className="h-8 w-auto"
                   />
                   </Link>
