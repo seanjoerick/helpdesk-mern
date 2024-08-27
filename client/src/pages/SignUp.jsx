@@ -1,20 +1,13 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { Listbox } from '@headlessui/react'
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
-
-const people = [
-  { id: 1, name: 'Wade Cooper' },
-  { id: 2, name: 'Arlene Mccoy' },
-  { id: 3, name: 'Devon Webb' },
-  { id: 4, name: 'Tom Cook' },
-  { id: 5, name: 'Tanya Fox' },
-  { id: 6, name: 'Hellen Schmidt' },
-]
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 export default function SignUp() {
-  const [selectedPerson, setSelectedPerson] = useState(people[0])
-
+  const [formData, setFormData] = useState({})
+  const handleChange = (e) => {
+   
+  }  
+  console.log(formData)
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
     <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -65,6 +58,7 @@ export default function SignUp() {
               placeholder=" e.g., John Smith"
               autoComplete="username"
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              onChange={handleChange}
             />
           </div>
         </div>
@@ -78,10 +72,11 @@ export default function SignUp() {
               id="email"
               type=" email"
               required
-              placeholder=' @gmail.com'
+              placeholder=' name@gmail.com'
               autoComplete="email"
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-            />
+              onChange={handleChange}
+           />
           </div>
         </div>
 
@@ -99,6 +94,7 @@ export default function SignUp() {
               placeholder=" Password"
               autoComplete="current-password"
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              onChange={handleChange}
             />
           </div>
         </div>
