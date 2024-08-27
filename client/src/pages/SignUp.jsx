@@ -61,6 +61,7 @@ export default function SignUp() {
             }, 2000); 
         } else {
             setErrorMessage(data.message || 'An unexpected error occurred.');
+            setLoading(false);
         }
     } catch (error) {
         console.error('Error:', error);
