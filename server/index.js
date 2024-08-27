@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import cors from 'cors'; 
 import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
 import departmentRouter from './routes/department.route.js';
@@ -10,6 +11,9 @@ dotenv.config();
 
 // Initialize Express application
 const app = express();
+
+// Apply CORS middleware
+app.use(cors()); // Apply cors middleware
 
 // Middleware to parse JSON bodies
 app.use(express.json());
