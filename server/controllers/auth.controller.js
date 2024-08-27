@@ -1,5 +1,5 @@
 import User from '../models/user.model.js';
-import Department from '../models/department.model.js'; // Import the Department model
+import Department from '../models/department.model.js';
 import bcryptjs from 'bcryptjs';
 import { errorHandler } from '../utils/error.js';
 
@@ -8,13 +8,13 @@ export const signup = async (req, res, next) => {
     const userRole = roles || 'user'; 
 
     if (!username || !email || !password || !department) {
-        return next(errorHandler(400, 'All fields are required'));
+        return res.status(400).json({ success: false, message: 'All fields are required' });
     }
 
     try {
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return next(errorHandler(400, 'User already exists!'));    
+            return res.status(400).json({ success: false, message: 'User already exists!' });   
         }
 
         const validDepartment = await Department.findById(department);
