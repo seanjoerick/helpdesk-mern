@@ -1,48 +1,42 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
 
 export default function SignIn() {
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [buttonDisabled, setButtonDisabled] = useState(false); 
-  const navigate = useNavigate();
-
   const [formData, setFormData] = useState({});
-  
+  const { loading, error: errorMessage } = useSelector(state => state.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setButtonDisabled(true); // Disable button on submit
-
+    dispatch(signInStart());
+  
     try {
-        const res = await fetch('/server/auth/signin', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData),
-        });
-        const data = await res.json();
-
-        if (!res.ok) {
-          setErrorMessage(data.message || 'An error occurred');
-          return;
-        }
-
-        navigate('/');
+      const res = await fetch('/server/auth/signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+  
+      if (!res.ok) {
+        const errorData = await res.json();
+        dispatch(signInFailure(errorData.message || 'An unexpected error occurred'));
+        return;
+      }
+  
+      const data = await res.json();
+      dispatch(signInSuccess(data));
+      navigate('/');
     } catch (error) {
-        setErrorMessage('An unexpected error occurred.');
-        setLoading(false);
-        setButtonDisabled(false); 
-    } finally {
-        setLoading(false);
-        setButtonDisabled(false); 
+      dispatch(signInFailure('Network error: ' + error.message));
     }
   };
-
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -97,7 +91,7 @@ export default function SignIn() {
           <div>
             <button
               type="submit"
-              disabled={buttonDisabled}
+             
               className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-indigo-300"
             >
               {loading ? 'Signing in...' : 'Sign in'}
@@ -111,12 +105,11 @@ export default function SignIn() {
             Sign up
           </Link>
         </p>
-
         {errorMessage && (
-          <div className="mt-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-            <span className="block sm:inline">{errorMessage}</span>
-          </div>
-        )}
+        <div className="mt-5 p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+        {errorMessage}
+        </div>
+      )}
       </div>
     </div>
   );
