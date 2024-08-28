@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import OAuth from '../components/OAuth';
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -171,6 +172,7 @@ export default function SignUp() {
               {loading ? 'Signing Up...' : 'Sign Up'}
             </button>
           </div>
+          <OAuth />
         </form>
 
         <p className="mt-2 text-center text-sm text-gray-500">
