@@ -2,7 +2,9 @@ import React from 'react';
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-
+import { useDispatch, useSelector } from 'react-redux'
+import { signoutSuccess } from '../redux/user/userSlice'
+import { useNavigate } from 'react-router-dom';
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Dashboard', href: '/admin-dashboard' },
@@ -14,8 +16,28 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-export default function Navigation({ currentUser }) {
+export default function Navigation() {
   const location = useLocation();
+  const { currentUser } = useSelector(state => state.user)
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    try {
+      const res = await fetch('/server/user/signout', {
+        method: 'POST',
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        dispatch(signoutSuccess());
+        navigate('/sign-in')
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <div>
@@ -84,7 +106,7 @@ export default function Navigation({ currentUser }) {
                     <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Your Profile</Link>
                   </MenuItem>
                   <MenuItem>
-                    <button className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                    <button onClick={handleSignOut} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300">
                       Sign out
                     </button>
                   </MenuItem>
