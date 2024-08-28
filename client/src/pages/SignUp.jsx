@@ -3,14 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function SignUp() {
+  const navigate = useNavigate();
   const [departments, setDepartments] = useState([]);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
-    department: '',
+    department: '', 
     username: '',
     email: '',
     password: ''
@@ -25,7 +24,6 @@ export default function SignUp() {
         console.error('Error fetching departments:', error);
       }
     };
-
     fetchDepartments();
   }, []);
 
@@ -42,32 +40,30 @@ export default function SignUp() {
     setLoading(true);
     setErrorMessage(null);
     setSuccessMessage(null);
-    
     try {
-        const res = await fetch('/server/auth/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData),
-        });
-        
-        const data = await res.json();
+      const res = await fetch('/server/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+    });
 
-        setLoading(false);
+    const data = await res.json();
 
-        if (res.ok) {
-            setSuccessMessage('Account successfully created! Redirecting to sign-in page...');
-            setTimeout(() => {
-                navigate('/sign-in');
-            }, 2000); 
-        } else {
-            setErrorMessage(data.message || 'An unexpected error occurred.');
-            setLoading(false);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        setErrorMessage('An unexpected error occurred.');
+    setLoading(false);
+
+    if (res.ok) {
+        setSuccessMessage('Account successfully created! Redirecting to sign-in page...');
+        setTimeout(() => {
+            navigate('/sign-in');
+        }, 1000); 
+    } else {
+        setErrorMessage(data.message || 'An unexpected error occurred.');
     }
-};
+    } catch (error) {
+      console.error('Error:', error);
+      setErrorMessage('An unexpected error occurred.');
+    }
+  };
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -84,7 +80,7 @@ export default function SignUp() {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="mt-4">
+        <div className="mt-4">
             <label htmlFor="department" className="block text-sm font-medium leading-6 text-gray-900">
               Department
             </label>
@@ -171,8 +167,7 @@ export default function SignUp() {
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-indigo-300"
-            >
+              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-indigo-300">
               {loading ? 'Signing Up...' : 'Sign Up'}
             </button>
           </div>
@@ -184,7 +179,6 @@ export default function SignUp() {
             Sign In
           </Link>
         </p>
-
         {errorMessage && (
           <div className="mt-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
             <span className="block sm:inline">{errorMessage}</span>
