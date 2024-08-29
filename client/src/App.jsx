@@ -8,7 +8,8 @@ import Profile from './pages/Profile';
 import Account from './pages/Account';
 import AdminDashBoard from './pages/AdminDashboard';
 import Settings from './pages/Settings';
-import PrivateRoute from './components/PrivateRoute'; // Import PrivateRoute component
+import PrivateRoute from './components/PrivateRoute'; 
+
 
 export default function App() {
   return (

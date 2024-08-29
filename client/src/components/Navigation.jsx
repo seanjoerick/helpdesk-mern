@@ -5,6 +5,8 @@ import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
 import { signoutSuccess } from '../redux/user/userSlice'
 import { useNavigate } from 'react-router-dom';
+import Footer from './Footer';
+
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Dashboard', href: '/admin-dashboard' },
@@ -57,8 +59,8 @@ export default function Navigation() {
                   <Link to='/'>
                   <img
                     alt="Help desk"
-                    src="https://images.stockcake.com/public/c/3/2/c3269d7d-a4b5-4f07-b98e-74b0fff0ee85_large/customer-service-professional-stockcake.jpg"
-                    className="h-8 w-auto"
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUPT3pWQb7bPoo9f-blaLMAHC79K6eGSsTrQ&s"
+                    className="h-8 w-8 rounded-full"
                   />
                   </Link>
                 </div>
@@ -88,7 +90,8 @@ export default function Navigation() {
                 <span className="sr-only">View notifications</span>
                 <BellIcon aria-hidden="true" className="h-6 w-6" />
               </button>
-              <Menu as="div" className="relative ml-3">
+              
+                <Menu as="div" className="relative ml-3">
                 <div>
                   <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                     <span className="sr-only">Open user menu</span>
@@ -112,6 +115,7 @@ export default function Navigation() {
                   </MenuItem>
                 </MenuItems>
               </Menu>
+                
             </div>
           </div>
         </div>
@@ -137,6 +141,7 @@ export default function Navigation() {
       <main>
         <Outlet />
       </main>
+      <Footer />
     </div>
   );
 }

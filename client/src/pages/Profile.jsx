@@ -1,8 +1,10 @@
 import React from 'react'
-
+import { useDispatch, useSelector } from 'react-redux'
 
 
 export default function Profile() {
+  const { currentUser } = useSelector(state => state.user)
+
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -10,7 +12,7 @@ export default function Profile() {
           Profile
         </h2>
         <img
-          src='https://via.placeholder.com/256'
+          src={currentUser?.avatar || 'https://via.placeholder.com/256'}
           alt="Profile"
           className="mx-auto mt-5 mb-2 h-12 w-12 rounded-full"
         />
@@ -22,12 +24,8 @@ export default function Profile() {
             <div className="mt-2">
               <input
                 id="email"
-                type="email"
-                // defaultValue={currentUser.email}
+                defaultValue={currentUser.email}
                 readOnly
-                required
-                autoComplete="email"
-                placeholder=" name@example.com"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -39,14 +37,13 @@ export default function Profile() {
               <input
                 id="name"
                 type="text"
-                 // defaultValue={currentUser.name}
+                 defaultValue={currentUser.username}
                  placeholder=" e.g., John Smith"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
              
               />
             </div>
           </div>
-
           <div>
             <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">Update Password</label>
             <div className="mt-2">
@@ -55,8 +52,7 @@ export default function Profile() {
                 type="password"
                 autoComplete="new-password"
                 placeholder=" Password"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"/>
             </div>
           </div>
 
@@ -70,7 +66,7 @@ export default function Profile() {
           </div>
         </form>
         <div className='text-red-600 cursor-pointer mt-3'>
-          {/* <span onClick={openModal}>Delete Account</span> */}
+
            <span >Delete Account</span>
         </div>
       </div>
@@ -82,11 +78,7 @@ export default function Profile() {
       {updateSuccess && (
         <p className='text-green-700 mt-3 text-center'>{updateSuccess}</p>
       )} */}
-      {/* <ConfirmModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        onConfirm={handleConfirmDelete}
-      /> */}
+     
     </div>
   )
 }
