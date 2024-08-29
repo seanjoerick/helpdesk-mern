@@ -5,6 +5,7 @@ import cors from 'cors';
 import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
 import departmentRouter from './routes/department.route.js';
+import cookieParser from 'cookie-parser';
 
 // Hide sensitive information
 dotenv.config();
@@ -17,6 +18,7 @@ app.use(cors()); // Apply cors middleware
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+app.use(cookieParser());
 
 // Error handling middleware
 app.use((err, req, res, next) => {
