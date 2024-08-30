@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import useDepartments from '../hooks/useDepartments';
+import Footer from '../components/Footer';  
 
 export default function SignUp() {
   const navigate = useNavigate();
-  const [departments, setDepartments] = useState([]);
+  const { departments, loading: loadingDepartments, error: departmentsError } = useDepartments();
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -14,18 +15,6 @@ export default function SignUp() {
     email: '',
     password: ''
   });
-
-  useEffect(() => {
-    const fetchDepartments = async () => {
-      try {
-        const response = await axios.get('/server/department');
-        setDepartments(response.data);
-      } catch (error) {
-        console.error('Error fetching departments:', error);
-      }
-    };
-    fetchDepartments();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,23 +34,23 @@ export default function SignUp() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
-    });
+      });
 
-    const data = await res.json();
+      const data = await res.json();
+      setLoading(false);
 
-    setLoading(false);
-
-    if (res.ok) {
+      if (res.ok) {
         setSuccessMessage('Account successfully created! Redirecting to sign-in page...');
         setTimeout(() => {
-            navigate('/sign-in');
+          navigate('/sign-in');
         }, 1000); 
-    } else {
+      } else {
         setErrorMessage(data.message || 'An unexpected error occurred.');
-    }
+      }
     } catch (error) {
       console.error('Error:', error);
       setErrorMessage('An unexpected error occurred.');
+      setLoading(false);
     }
   };
 
@@ -70,7 +59,7 @@ export default function SignUp() {
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
           alt="Help desk"
-          src="https://images.stockcake.com/public/c/3/2/c3269d7d-a4b5-4f07-b98e-74b0fff0ee85_large/customer-service-professional-stockcake.jpg"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUPT3pWQb7bPoo9f-blaLMAHC79K6eGSsTrQ&s"
           className="mx-auto h-10 w-auto"
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -80,7 +69,7 @@ export default function SignUp() {
 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="mt-4">
+          <div className="mt-4">
             <label htmlFor="department" className="block text-sm font-medium leading-6 text-gray-900">
               Department
             </label>
@@ -97,11 +86,17 @@ export default function SignUp() {
                 <option value="" disabled hidden>
                   Select a department
                 </option>
-                {departments.map(department => (
-                  <option key={department._id} value={department._id}>
-                    {department.name}
-                  </option>
-                ))}
+                {loadingDepartments ? (
+                  <option>Loading departments...</option>
+                ) : departmentsError ? (
+                  <option>Error loading departments</option>
+                ) : (
+                  departments.map(department => (
+                    <option key={department._id} value={department._id}>
+                      {department.name}
+                    </option>
+                  ))
+                )}
               </select>
             </div>
           </div>
@@ -118,7 +113,7 @@ export default function SignUp() {
                 value={formData.username}
                 onChange={handleChange}
                 required
-                placeholder=" e.g., John Smith"
+                placeholder="e.g., John Smith"
                 autoComplete="username"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
@@ -137,7 +132,7 @@ export default function SignUp() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                placeholder=" name@gmail.com"
+                placeholder="name@gmail.com"
                 autoComplete="email"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
@@ -156,7 +151,7 @@ export default function SignUp() {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                placeholder=" Password"
+                placeholder="Password"
                 autoComplete="current-password"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
@@ -171,7 +166,6 @@ export default function SignUp() {
               {loading ? 'Signing Up...' : 'Sign Up'}
             </button>
           </div>
- 
         </form>
 
         <p className="mt-2 text-center text-sm text-gray-500">
@@ -180,6 +174,7 @@ export default function SignUp() {
             Sign In
           </Link>
         </p>
+
         {errorMessage && (
           <div className="mt-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
             <span className="block sm:inline">{errorMessage}</span>
@@ -192,6 +187,7 @@ export default function SignUp() {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 }

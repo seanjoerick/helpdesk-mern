@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice';
 import OAuth from '../components/OAuth';
-
+import Footer from '../components/Footer';
 export default function SignIn() {
   const [formData, setFormData] = useState({});
   const { loading, error: errorMessage } = useSelector(state => state.user);
@@ -44,7 +44,7 @@ export default function SignIn() {
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img
           alt="Help desk"
-          src="https://images.stockcake.com/public/c/3/2/c3269d7d-a4b5-4f07-b98e-74b0fff0ee85_large/customer-service-professional-stockcake.jpg"
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUPT3pWQb7bPoo9f-blaLMAHC79K6eGSsTrQ&s"
           className="mx-auto h-10 w-auto"
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -113,6 +113,7 @@ export default function SignIn() {
         </div>
       )}
       </div>
+      <Footer />
     </div>
   );
 }

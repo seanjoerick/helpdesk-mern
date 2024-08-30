@@ -9,13 +9,12 @@ export const createDepartment = async (req, res, next) => {
     }
 
     try {
-        const uppercaseName = name.toUpperCase();
-        const existingDepartment = await Department.findOne({ name: uppercaseName });
+        const existingDepartment = await Department.findOne({ name });
         if (existingDepartment) {
             return next(errorHandler(400, 'Department Already Exists!'));
         }
 
-        const newDepartment = new Department({ name: uppercaseName });
+        const newDepartment = new Department({ name });
         await newDepartment.save();
         res.status(201).json({ message: 'Department created successfully', department: newDepartment });
     } catch (error) {
