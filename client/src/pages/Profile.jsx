@@ -1,8 +1,63 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import useDepartments from '../hooks/useDepartments';
+import { updateFailure, updateStart, updateSuccess } from '../redux/user/userSlice';
 
 export default function Profile() {
-  const { currentUser } = useSelector(state => state.user);
+  const { currentUser } = useSelector((state) => state.user);
+  const { departments, loading: loadingDepartments, error: departmentsError } = useDepartments();
+  const dispatch = useDispatch();
+  
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    department: ''
+  });
+
+  useEffect(() => {
+    if (currentUser) {
+      setFormData({
+        username: currentUser.username || '',
+        email: currentUser.email || '',
+        password: '',
+        department: currentUser.department || ''
+      });
+    }
+  }, [currentUser]);
+
+  console.log(formData)
+  
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    dispatch(updateStart());
+    
+    try {
+      const res = await fetch(`/server/user/update/${currentUser._id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if(data.success === false) {
+        dispatch(updateFailure(data.message));
+        return;
+      }
+      dispatch(updateSuccess(data.message));
+    } catch (error) {
+      dispatch(updateFailure(error.message));
+    }
+  };
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -11,26 +66,27 @@ export default function Profile() {
           Profile
         </h2>
         <img
-          src={currentUser?.avatar || 'https://via.placeholder.com/256'}
+          src={currentUser.avatar || 'https://via.placeholder.com/256'}
           alt="Profile"
           className="mx-auto mt-5 mb-2 h-12 w-12 rounded-full"
         />
       </div>
-      <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6">
+
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="department" className="block text-sm font-medium leading-6 text-gray-900">
-              Department
+            <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
+              Username
             </label>
             <div className="mt-2">
-              <select
-                id="department"
-                value=""
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              >
-                <option value="">Select a department</option>
-                {/* Populate department options here */}
-              </select>
+              <input
+                id="username"
+                name="username"
+                type="text"
+                value={formData.username}
+                onChange={handleChange}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
             </div>
           </div>
 
@@ -41,23 +97,10 @@ export default function Profile() {
             <div className="mt-2">
               <input
                 id="email"
-                defaultValue={currentUser.email}
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                readOnly
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
-              Name
-            </label>
-            <div className="mt-2">
-              <input
-                id="name"
-                type="text"
-                defaultValue={currentUser.username}
-                placeholder="e.g., John Smith"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -65,19 +108,55 @@ export default function Profile() {
 
           <div>
             <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-              Update Password
+              Password
             </label>
             <div className="mt-2">
               <input
                 id="password"
+                name="password"
                 type="password"
-                autoComplete="new-password"
-                placeholder="New Password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder='Password'
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
-          
+
+          <div>
+            <label htmlFor="department" className="block text-sm font-medium leading-6 text-gray-900">
+              Department
+            </label>
+            <div className="mt-2">
+              <select
+                id="department"
+                name="department"
+                value={formData.department}
+                onChange={handleChange}
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              >
+                <option value="" disabled hidden>
+                  Select a department
+                </option>
+                {loadingDepartments ? (
+                  <option>Loading departments...</option>
+                ) : departmentsError ? (
+                  <option>Error loading departments</option>
+                ) : (
+                  departments.length === 0 ? (
+                    <option>No departments available</option>
+                  ) : (
+                    departments.map(department => (
+                      <option key={department._id} value={department._id}>
+                        {department.name}
+                      </option>
+                    ))
+                  )
+                )}
+              </select>
+            </div>
+          </div>
+
           <div>
             <button
               type="submit"
@@ -87,6 +166,7 @@ export default function Profile() {
             </button>
           </div>
         </form>
+
         <div className="text-red-600 cursor-pointer mt-3">
           <span>Delete Account</span>
         </div>

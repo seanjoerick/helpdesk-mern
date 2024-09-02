@@ -10,19 +10,17 @@ export default function SignUp() {
   const [successMessage, setSuccessMessage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    department: '', 
-    username: '',
-    email: '',
-    password: ''
+    department: ''
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value
+    });
   };
+  
+  console.log(formData);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,7 +75,7 @@ export default function SignUp() {
               <select
                 id="department"
                 name="department"
-                value={formData.department}
+                value={formData.department} 
                 onChange={handleChange}
                 required
                 autoComplete="department-name"
@@ -110,7 +108,6 @@ export default function SignUp() {
                 id="username"
                 name="username"
                 type="text"
-                value={formData.username}
                 onChange={handleChange}
                 required
                 placeholder="e.g., John Smith"
@@ -129,7 +126,6 @@ export default function SignUp() {
                 id="email"
                 name="email"
                 type="email"
-                value={formData.email}
                 onChange={handleChange}
                 required
                 placeholder="name@gmail.com"
@@ -148,7 +144,6 @@ export default function SignUp() {
                 id="password"
                 name="password"
                 type="password"
-                value={formData.password}
                 onChange={handleChange}
                 required
                 placeholder="Password"
