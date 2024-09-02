@@ -16,11 +16,7 @@ import User from '../models/user.model.js';
       }
       req.body.password = bcryptjs.hashSync(req.body.password, 10);
     }
-    if ((req.body.username && req.body.username.includes(' ')) || 
-        (req.body.password && req.body.password.includes(' '))) {
-      return res.status(400).json({ success: false, message: 'Username and Password cannot contain spaces' });
-    }
-  
+    
     try {
       const updatedUser = await User.findByIdAndUpdate(req.params.id, {
         $set: {

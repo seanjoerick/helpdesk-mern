@@ -7,20 +7,14 @@ export default function Profile() {
   const { currentUser } = useSelector((state) => state.user);
   const { departments, loading: loadingDepartments, error: departmentsError } = useDepartments();
   const dispatch = useDispatch();
-  
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    department: ''
-  });
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
     if (currentUser) {
       setFormData({
         username: currentUser.username || '',
         email: currentUser.email || '',
-        password: '',
+        password: currentUser.password,
         department: currentUser.department || ''
       });
     }
@@ -59,6 +53,7 @@ export default function Profile() {
     }
   };
 
+
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -71,26 +66,10 @@ export default function Profile() {
           className="mx-auto mt-5 mb-2 h-12 w-12 rounded-full"
         />
       </div>
-
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
-              Username
-            </label>
-            <div className="mt-2">
-              <input
-                id="username"
-                name="username"
-                type="text"
-                value={formData.username}
-                onChange={handleChange}
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          <div>
+        <div>
             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
               Email address
             </label>
@@ -101,23 +80,6 @@ export default function Profile() {
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-              Password
-            </label>
-            <div className="mt-2">
-              <input
-                id="password"
-                name="password"
-                type="password"
-                value={formData.password}
-                onChange={handleChange}
-                placeholder='Password'
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
@@ -154,6 +116,40 @@ export default function Profile() {
                   )
                 )}
               </select>
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
+              Username
+            </label>
+            <div className="mt-2">
+              <input
+                id="username"
+                name="username"
+                type="text"
+                value={formData.username}
+                onChange={handleChange}
+                placeholder='Username'
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+              Password
+            </label>
+            <div className="mt-2">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder='Password'
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              />
             </div>
           </div>
 
