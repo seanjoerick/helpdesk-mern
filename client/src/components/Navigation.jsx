@@ -8,9 +8,10 @@ import { useNavigate } from 'react-router-dom';
 import Footer from './Footer';
 
 const navigation = [
-  { name: 'Home', href: '/' },
-  { name: 'Dashboard', href: '/admin-dashboard' },
+  { name: 'Dashboard', href: '/' },
+  { name: 'Ticket', href: '/tickets' },
   { name: 'Accounts', href: '/accounts' },
+  { name: 'Reports', href: '/reports' },
   { name: 'Settings', href: '/settings' },
 ];
 
@@ -44,7 +45,7 @@ export default function Navigation() {
   return (
     <div>
       <Disclosure as="nav" className="bg-gray-800">
-        <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+        <div className="mx-auto mb-3 max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-16 items-center justify-between">
             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
               {/* Mobile menu button */}

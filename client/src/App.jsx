@@ -1,6 +1,4 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import Home from './pages/Home';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Navigation from './components/Navigation';
@@ -9,7 +7,8 @@ import Account from './pages/Account';
 import AdminDashBoard from './pages/AdminDashboard';
 import Settings from './pages/Settings';
 import PrivateRoute from './components/PrivateRoute'; 
-
+import Ticket from './pages/Tickets';
+import Reports from './pages/Reports';
 
 export default function App() {
   return (
@@ -22,8 +21,9 @@ export default function App() {
         {/* Protected routes */}
         <Route element={<PrivateRoute />}>
           <Route element={<Navigation />}>
-            <Route path='/' element={<Home />} />
-            <Route path='admin-dashboard' element={<AdminDashBoard />} />
+            <Route path='/' element={<AdminDashBoard />} />
+            <Route path='tickets' element={<Ticket />} />
+            <Route path='reports' element={<Reports />} />
             <Route path='accounts' element={<Account />} />
             <Route path='settings' element={<Settings />} />
             <Route path='profile' element={<Profile />} />

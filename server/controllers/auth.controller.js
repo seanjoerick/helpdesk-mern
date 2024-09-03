@@ -5,8 +5,7 @@ import { errorHandler } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
 
 export const signup = async (req, res, next) => {
-    const { department, username, email, password, roles } = req.body;
-    const userRole = roles || 'user'; 
+    const { department, username, email, password } = req.body;
 
     if (!username || !email || !password || !department) {
         return res.status(400).json({ success: false, message: 'All fields are required' });
@@ -28,7 +27,6 @@ export const signup = async (req, res, next) => {
             department, 
             username,
             email,
-            roles: [userRole],
             password: hashedPassword
         });
 
@@ -37,7 +35,8 @@ export const signup = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
-}
+};
+
 
 export const signin = async (req, res, next) => {
     const  { email, password } = req.body;
@@ -69,7 +68,7 @@ export const google = async (req, res, next) => {
         const user = await User.findOne({ email });
 
         if (user) {
-            // Generate a JWT token
+           
             const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
             
             const { password, ...rest } = user._doc;
@@ -89,7 +88,8 @@ export const google = async (req, res, next) => {
                 username: name,
                 email: email,
                 password: hashedPassword,
-                avatar: googlePhotoUrl,
+                avatar: googlePhotoUrl
+                
             });
             
             await newUser.save();

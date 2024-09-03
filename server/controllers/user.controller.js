@@ -11,9 +11,6 @@ import User from '../models/user.model.js';
     }
     // If there's a password
     if (req.body.password) {
-      if (req.body.password.length < 6) {
-        return res.status(400).json({ success: false, message: 'Password must be at least 6 characters!' });
-      }
       req.body.password = bcryptjs.hashSync(req.body.password, 10);
     }
     

@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function Settings() {
+export default function Ticket() {
   return (
     <div>
-      Welcome to settings
+      Welcome to ticket
     </div>
   )
 }

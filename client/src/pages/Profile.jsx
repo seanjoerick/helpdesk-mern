@@ -7,7 +7,12 @@ export default function Profile() {
   const { currentUser } = useSelector((state) => state.user);
   const { departments, loading: loadingDepartments, error: departmentsError } = useDepartments();
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    department: ''
+  });
 
   useEffect(() => {
     if (currentUser) {
@@ -20,14 +25,14 @@ export default function Profile() {
     }
   }, [currentUser]);
 
-  console.log(formData)
-  
+  console.log(formData);
+
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData({
-      ...formData,
+    setFormData((prevData) => ({
+      ...prevData,
       [name]: value
-    });
+    }));
   };
 
   const handleSubmit = async (event) => {
@@ -43,7 +48,7 @@ export default function Profile() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      if(data.success === false) {
+      if (data.success === false) {
         dispatch(updateFailure(data.message));
         return;
       }
@@ -52,7 +57,6 @@ export default function Profile() {
       dispatch(updateFailure(error.message));
     }
   };
-
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -67,9 +71,8 @@ export default function Profile() {
         />
       </div>
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        
         <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
+          <div>
             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
               Email address
             </label>
@@ -78,7 +81,7 @@ export default function Profile() {
                 id="email"
                 name="email"
                 type="email"
-                value={formData.email}
+                value={formData.email || ''}
                 onChange={handleChange}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
@@ -93,7 +96,7 @@ export default function Profile() {
               <select
                 id="department"
                 name="department"
-                value={formData.department}
+                value={formData.department || ''}
                 onChange={handleChange}
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               >
@@ -128,7 +131,7 @@ export default function Profile() {
                 id="username"
                 name="username"
                 type="text"
-                value={formData.username}
+                value={formData.username || ''}
                 onChange={handleChange}
                 placeholder='Username'
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -145,7 +148,7 @@ export default function Profile() {
                 id="password"
                 name="password"
                 type="password"
-                value={formData.password}
+                value={formData.password || ''}
                 onChange={handleChange}
                 placeholder='Password'
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
