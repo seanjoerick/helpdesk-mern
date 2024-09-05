@@ -89,7 +89,6 @@ export const google = async (req, res, next) => {
                 email: email,
                 password: hashedPassword,
                 avatar: googlePhotoUrl
-                
             });
             
             await newUser.save();

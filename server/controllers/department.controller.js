@@ -30,3 +30,16 @@ export const getAllDepartments = async (req, res, next) => {
         next(error);
     }
 };
+
+export const updateDeparment = async (req, res, next) => {
+    if (req.user.id !== req.params.id) {
+        return res.status(403).json({ success: false, message: 'Forbidden: You are not authorized to update this department.' });
+      }
+
+      
+    try {
+        
+    } catch (error) {
+        next(error)
+    }
+}
