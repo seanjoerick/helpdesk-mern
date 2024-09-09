@@ -2,17 +2,21 @@ import React from 'react';
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux'
-import { signoutSuccess } from '../redux/user/userSlice'
+import { useDispatch, useSelector } from 'react-redux';
+import { signoutSuccess } from '../redux/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 import Footer from './Footer';
 
-const navigation = [
-  { name: 'Dashboard', href: '/' },
-  { name: 'Ticket', href: '/tickets' },
-  { name: 'Accounts', href: '/accounts' },
-  { name: 'Reports', href: '/reports' },
-  { name: 'Settings', href: '/settings' },
+const adminNavigation = [
+  { name: 'Dashboard', href: '/admin/dashboard' },
+  { name: 'Tickets', href: '/admin/tickets' },
+  { name: 'Accounts', href: '/admin/accounts' },
+  { name: 'Reports', href: '/admin/reports' },
+  { name: 'Settings', href: '/admin/settings' },
+];
+
+const userNavigation = [
+  { name: 'Profile', href: '/user/profile' },
 ];
 
 function classNames(...classes) {
@@ -21,7 +25,7 @@ function classNames(...classes) {
 
 export default function Navigation() {
   const location = useLocation();
-  const { currentUser } = useSelector(state => state.user)
+  const { currentUser } = useSelector(state => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -32,15 +36,17 @@ export default function Navigation() {
       });
       const data = await res.json();
       if (!res.ok) {
-        console.log(data.message);
+        console.error(data.message); 
       } else {
         dispatch(signoutSuccess());
-        navigate('/sign-in')
+        navigate('/sign-in');
       }
     } catch (error) {
-      console.log(error.message);
+      console.error('Sign-out error:', error.message); 
     }
   };
+
+  const navigation = currentUser?.roles === 'admin' ? adminNavigation : userNavigation;
 
   return (
     <div>
@@ -49,22 +55,22 @@ export default function Navigation() {
           <div className="relative flex h-16 items-center justify-between">
             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
               {/* Mobile menu button */}
-              <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+              <Disclosure.Button className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                 <span className="sr-only">Open main menu</span>
                 <Bars3Icon aria-hidden="true" className="block h-6 w-6 group-data-[open]:hidden" />
                 <XMarkIcon aria-hidden="true" className="hidden h-6 w-6 group-data-[open]:block" />
-              </DisclosureButton>
+              </Disclosure.Button>
             </div>
             <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                <div className="flex flex-shrink-0 items-center">
-                  <Link to='/'>
+              <div className="flex flex-shrink-0 items-center">
+                <Link to='/'>
                   <img
                     alt="Help desk"
                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUPT3pWQb7bPoo9f-blaLMAHC79K6eGSsTrQ&s"
                     className="h-8 w-8 rounded-full"
                   />
-                  </Link>
-                </div>
+                </Link>
+              </div>
               <div className="hidden sm:ml-6 sm:block">
                 <div className="flex space-x-4">
                   {navigation.map((item) => (
@@ -91,8 +97,8 @@ export default function Navigation() {
                 <span className="sr-only">View notifications</span>
                 <BellIcon aria-hidden="true" className="h-6 w-6" />
               </button>
-              
-                <Menu as="div" className="relative ml-3">
+
+              <Menu as="div" className="relative ml-3">
                 <div>
                   <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                     <span className="sr-only">Open user menu</span>
@@ -103,27 +109,26 @@ export default function Navigation() {
                     />
                   </MenuButton>
                 </div>
-                <MenuItems
+                <Menu.Items
                   transition
                   className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none">
-                  <MenuItem>
+                  <Menu.Item>
                     <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Your Profile</Link>
-                  </MenuItem>
-                  <MenuItem>
+                  </Menu.Item>
+                  <Menu.Item>
                     <button onClick={handleSignOut} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300">
                       Sign out
                     </button>
-                  </MenuItem>
-                </MenuItems>
+                  </Menu.Item>
+                </Menu.Items>
               </Menu>
-                
             </div>
           </div>
         </div>
         <DisclosurePanel className="sm:hidden">
           <div className="space-y-1 px-2 pb-3 pt-2">
             {navigation.map((item) => (
-              <DisclosureButton
+              <Disclosure.Button
                 key={item.name}
                 as={Link}
                 to={item.href}
@@ -134,7 +139,7 @@ export default function Navigation() {
                 )}
               >
                 {item.name}
-              </DisclosureButton>
+              </Disclosure.Button>
             ))}
           </div>
         </DisclosurePanel>

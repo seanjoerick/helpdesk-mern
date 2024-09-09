@@ -20,7 +20,7 @@ export default function SignIn() {
   
     try {
       const res = await fetch('/server/auth/signin', {
-        method: 'POST',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });

@@ -7,7 +7,8 @@ const router = express.Router();
 router.get('/test', test);
 
 // Define an update user route with authentication
-router.post('/update/:id', verifyToken, updateUser);
+router.put('/update/:id', verifyToken, updateUser);
+
 router.delete('/delete/:id', verifyToken, deleteUser);
 
 router.post('/signout', signout);

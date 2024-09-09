@@ -13,4 +13,4 @@ export default function PrivateRoute() {
   // Render child routes if authenticated
   return <Outlet />;
 }
- 
+
