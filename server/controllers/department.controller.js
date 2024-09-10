@@ -1,6 +1,7 @@
 import Department from '../models/department.model.js';
 import { errorHandler } from '../utils/error.js';
 
+
 export const createDepartment = async (req, res, next) => {
     const { name } = req.body;
 
