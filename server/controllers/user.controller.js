@@ -1,15 +1,16 @@
 import bcryptjs from 'bcryptjs';
 import User from '../models/user.model.js';
+import Department from '../models/department.model.js';
+import { errorHandler } from '../utils/error.js';
 
   export const test = (req, res) => {
     res.json({ message: 'API is working!' });
   };
   
-  export const updateUser = async (req, res, next) => {
+  export const updateUserProfile = async (req, res, next) => {
     if (req.user.id !== req.params.id) {
       return res.status(403).json({ success: false, message: 'Forbidden: You are not authorized to update this user.' });
     }
-    // If there's a password
     if (req.body.password) {
       req.body.password = bcryptjs.hashSync(req.body.password, 10);
     }
@@ -31,8 +32,8 @@ import User from '../models/user.model.js';
       next(error);    
     }
   };
-  
-  export const deleteUser = async (req, res, next) => {
+
+  export const deleteUserAccount = async (req, res, next) => {
     if(req.user.id !== req.params.id) return next(errorHandler(401, 'You can only delete your own account!'))
         try {
             await User.findByIdAndDelete(req.params.id) 
@@ -51,3 +52,41 @@ import User from '../models/user.model.js';
     }
   };
 
+
+  export const createAdmin = async (req, res, next) => {
+    const { department, username, email, password } = req.body;
+
+    if (!username || !email || !password) {
+        return res.status(400).json({ success: false, message: 'All fields are required!' });
+    }
+
+    try {
+
+        const existingAdmin = await User.findOne({ email });
+        if (existingAdmin) {
+            return res.status(400).json({ success: false, message: 'Admin already exists!' });
+        }
+
+        const defaultDepartment = await Department.findOne({ name: 'Human Resources' });
+        if (!defaultDepartment) {
+            return res.status(400).json({ success: false, message: 'Default department not found!' });
+        }
+        const departmentId = department || defaultDepartment._id;
+
+        const hashedPassword = bcryptjs.hashSync(password, 10);
+
+        const newAdmin = new User({
+            username,
+            email,
+            password: hashedPassword,
+            roles: ['admin'],
+            department: departmentId
+        });
+
+        await newAdmin.save();
+        res.status(200).json({ success: true, message: 'Admin created successfully!', user: newAdmin });
+
+    } catch (error) {
+        next(error);
+    }
+};

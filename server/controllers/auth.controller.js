@@ -31,7 +31,7 @@ export const signup = async (req, res, next) => {
         });
 
         await newUser.save();
-        res.status(201).json({ message: 'User created successfully', user: newUser });
+        res.status(201).json({sucesss: true, message: 'User created successfully!', user: newUser });
     } catch (error) {
         next(error);
     }
@@ -49,7 +49,9 @@ export const signin = async (req, res, next) => {
       
 
         // Generate a JWT token
-      const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    //   const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+      const token = jwt.sign({ id: validUser._id, roles: validUser.roles }, process.env.JWT_SECRET);
+
 
       const { password: pass, ...rest } = validUser._doc;
         res.status(200).cookie('access_token', token, {
@@ -94,7 +96,8 @@ export const google = async (req, res, next) => {
             await newUser.save();
 
             // Generate a JWT token
-            const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+            // const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+            const token = jwt.sign({ id: newUser._id, roles: newUser.roles }, process.env.JWT_SECRET);
             
             const { password, ...rest } = newUser._doc;
             res.status(200).cookie('access_token', token, {
