@@ -7,20 +7,16 @@ import jwt from 'jsonwebtoken';
 export const signup = async (req, res, next) => {
     const { department, username, email, password } = req.body;
 
-    if (!username || !email || !password || !department) {
-        return res.status(400).json({ success: false, message: 'All fields are required' });
-    }
+    if (!username || !email || !password || !department) return res.status(400).json({ success: false, message: 'All fields are required' });
 
     try {
         const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ success: false, message: 'User already exists!' });   
-        }
+        if (existingUser) return res.status(400).json({ success: false, message: 'User already exists!' });   
+        
 
         const validDepartment = await Department.findById(department);
-        if (!validDepartment) {
-            return next(errorHandler(400, 'Invalid department ID.'));
-        }
+        if (!validDepartment) return next(errorHandler(400, 'Invalid department ID.'));
+        
 
         const hashedPassword = bcryptjs.hashSync(password, 10);
         const newUser = new User({
@@ -49,7 +45,6 @@ export const signin = async (req, res, next) => {
       
 
         // Generate a JWT token
-    //   const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
       const token = jwt.sign({ id: validUser._id, roles: validUser.roles }, process.env.JWT_SECRET);
 
 
@@ -96,7 +91,6 @@ export const google = async (req, res, next) => {
             await newUser.save();
 
             // Generate a JWT token
-            // const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
             const token = jwt.sign({ id: newUser._id, roles: newUser.roles }, process.env.JWT_SECRET);
             
             const { password, ...rest } = newUser._doc;

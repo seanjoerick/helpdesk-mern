@@ -7,15 +7,11 @@ import { errorHandler } from '../utils/error.js';
     res.json({ message: 'API is working!' });
   };
   
-  export const updateUserProfile = async (req, res, next) => {
-    if (req.user.id !== req.params.id) {
-      return res.status(403).json({ success: false, message: 'Forbidden: You are not authorized to update this user.' });
-    }
-    if (req.body.password) {
-      req.body.password = bcryptjs.hashSync(req.body.password, 10);
-    }
-    
+  export const updateUserProfile = async (req, res, next) => { 
     try {
+      if (req.user.id !== req.params.id) return res.status(403).json({ success: false, message: 'Forbidden: You are not authorized to update this user.' });
+      if (req.body.password) req.body.password = bcryptjs.hashSync(req.body.password, 10);
+    
       const updatedUser = await User.findByIdAndUpdate(req.params.id, {
         $set: {
           username: req.body.username, 
@@ -56,21 +52,17 @@ import { errorHandler } from '../utils/error.js';
   export const createAdmin = async (req, res, next) => {
     const { department, username, email, password } = req.body;
 
-    if (!username || !email || !password) {
-        return res.status(400).json({ success: false, message: 'All fields are required!' });
-    }
-
     try {
+      if (!username || !email || !password) return res.status(400).json({ success: false, message: 'All fields are required!' });
 
         const existingAdmin = await User.findOne({ email });
-        if (existingAdmin) {
-            return res.status(400).json({ success: false, message: 'Admin already exists!' });
-        }
+
+        if (existingAdmin) return res.status(400).json({ success: false, message: 'Admin already exists!' });
+      
 
         const defaultDepartment = await Department.findOne({ name: 'Human Resources' });
-        if (!defaultDepartment) {
-            return res.status(400).json({ success: false, message: 'Default department not found!' });
-        }
+        if (!defaultDepartment) return res.status(400).json({ success: false, message: 'Default department not found!' });
+        
         const departmentId = department || defaultDepartment._id;
 
         const hashedPassword = bcryptjs.hashSync(password, 10);
@@ -90,3 +82,60 @@ import { errorHandler } from '../utils/error.js';
         next(error);
     }
 };
+
+export const updateAdmin = async (req, res, next) => {
+  try {
+    if (req.body.password) req.body.password = bcryptjs.hashSync(req.body.password, 10)
+
+    const updatedAdmin = await User.findByIdAndUpdate(req.params.id, {
+      $set: {
+        username: req.body.username,
+        password: req.body.password,
+      }
+    }, { new: true });
+
+    if (!updatedAdmin) return res.status(400).json({ success: false, message: 'User not found!' });
+    
+
+    const { password, ...rest } = updatedAdmin._doc;
+
+    res.status(200).json({ success: true, user: rest });  
+
+  } catch (error) {
+    next(error);
+  }
+}
+
+export const deletedAccount = async (req, res, next) => {
+  try {
+
+    const deleteAccount = await User.findByIdAndDelete(req.params.id);
+    if (!deleteAccount) return res.status(400).json({ success: false, message: 'Account already deleted' });
+    
+    res.status(200).json({ success: true, message: 'Account deleted successfully!' });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+export const getAllAdmins = async (req, res, next) => {
+  try {
+    const admins = await User.find({ roles: 'admin'});
+    
+    res.status(200).json({admins});
+  } catch (error) {
+      next(error);
+  }
+}
+
+export const getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find({ roles: 'user'});
+    res.status(200).json({users});
+  } catch (error) {
+      next(error);
+  }
+}
+
+
