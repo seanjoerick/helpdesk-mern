@@ -1,45 +1,44 @@
 import mongoose from 'mongoose';
 
 const ticketSchema = new mongoose.Schema({
-  title: {
+  service_request_no: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
   },
-  description: {
+  date_finished: {
+    type: Date,
+  },
+  requested_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  conducted_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  comment_box: {
+    type: Boolean,
+    default: false,
+  },
+  action_taken: {
     type: String,
-    required: true
   },
   status: {
     type: String,
-    enum: ['Open', 'In Progress', 'Resolved', 'Closed'],
-    default: 'Open'
+    enum: ['ongoing', 'pending', 'completed'],
+    required: true,
   },
-  priority: {
-    type: String,
-    enum: ['Low', 'Medium', 'High'],
-    default: 'Medium'
-  },
-  created_by: {
+  comments: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  assigned_to: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  department: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Department'
-  },
-  interactions: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Interaction'
+    ref: 'TicketComment',
   }],
-  attachments: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Attachment'
-  }]
+  category: {
+    type: String,
+    enum: ['Service Request', 'Network Request', 'Web Request'],
+    required: true,
+  }
 }, { timestamps: true });
 
 const Ticket = mongoose.model('Ticket', ticketSchema);

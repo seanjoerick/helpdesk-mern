@@ -71,7 +71,7 @@ import { errorHandler } from '../utils/error.js';
             username,
             email,
             password: hashedPassword,
-            roles: ['admin'],
+            roles: 'admin',
             department: departmentId
         });
 
@@ -122,7 +122,7 @@ export const deletedAccount = async (req, res, next) => {
 export const getAllAdmins = async (req, res, next) => {
   try {
     const admins = await User.find({ roles: 'admin'});
-    
+
     res.status(200).json({admins});
   } catch (error) {
       next(error);

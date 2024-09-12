@@ -3,19 +3,19 @@ import { errorHandler } from '../utils/error.js';
 
 
 export const createDepartment = async (req, res, next) => {
-    const { name } = req.body;
+    const { departmentName } = req.body;
 
-    if (!name) {
+    if (!departmentName) {
         return next(errorHandler(400, 'Department name is required!'));
     }
 
     try {
-        const existingDepartment = await Department.findOne({ name });
+        const existingDepartment = await Department.findOne({ departmentName });
         if (existingDepartment) {
             return next(errorHandler(400, 'Department Already Exists!'));
         }
 
-        const newDepartment = new Department({ name });
+        const newDepartment = new Department({ departmentName });
         await newDepartment.save();
         res.status(201).json({ message: 'Department created successfully', department: newDepartment });
     } catch (error) {
@@ -25,14 +25,14 @@ export const createDepartment = async (req, res, next) => {
 
 export const updateDepartment = async (req, res, next) => {
     const { id } = req.params; //ginet ko yung id sa url parameters
-    const { name } = req.body; //get new name from request body
+    const { departmentName } = req.body; //get new name from request body
 
-    if(!name) {
+    if(!departmentName) {
         return next(errorHandler(400, 'Department name is required!'))
     }
 
     try {
-        const updatedDepartment = await Department.findByIdAndUpdate(id, { name }, { new: true });
+        const updatedDepartment = await Department.findByIdAndUpdate(id, { departmentName }, { new: true });
 
         if(!updatedDepartment) {
             return next(errorHandler(404, 'Department not found!'));

@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     trim: true,
-    lowercase: true 
+    lowercase: true
   },
   password: {
     type: String,
@@ -20,18 +20,19 @@ const userSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUPT3pWQb7bPoo9f-blaLMAHC79K6eGSsTrQ&s" 
+    default: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUPT3pWQb7bPoo9f-blaLMAHC79K6eGSsTrQ&s"
   },
   roles: {
     type: [String],
     enum: ['admin', 'user'],
-    default: ['user'], 
+    default: 'user',
     required: true
   },
-  department: [{
+  department: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Department'
-  }],
+    ref: 'Department',
+    required: true
+  },
   status: {
     type: String,
     enum: ['active', 'inactive'],
