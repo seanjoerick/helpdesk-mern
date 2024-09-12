@@ -2,6 +2,9 @@ Helpdesk/Ticket System
 Overview
 This System is a comprehensive solution designed to manage and track tickets within an organization. It allows users to submit tickets and admins to manage and address these tickets. The system includes functionalities for creating and managing tickets, assigning tickets to departments, and commenting on tickets.
 
+
+
+
 Features
 User Management: Users can create tickets and view their status. Admins can manage users and their roles.
 Ticket Creation: Users can create new tickets specifying the type of request, department, and comments.
