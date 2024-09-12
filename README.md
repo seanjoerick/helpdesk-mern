@@ -1,6 +1,6 @@
 Helpdesk/Ticket System
 Overview
-This Small System Project is a comprehensive solution designed to manage and track tickets within an organization. It allows users to submit tickets and admins to manage and address these tickets. The system includes functionalities for creating and managing tickets, assigning tickets to departments, and commenting on tickets.
+This Small Project is a comprehensive solution designed to manage and track tickets within an organization. It allows users to submit tickets and admins to manage and address these tickets. The system includes functionalities for creating and managing tickets, assigning tickets to departments, and commenting on tickets.
 
 
 
