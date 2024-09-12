@@ -3,11 +3,12 @@ import { createDepartment, updateDepartment, getAllDepartments, deleteDepartment
 import { isAdmin, verifyToken } from '../utils/verifiedUser.js';
 const router = express.Router();
 
-// Define a route to create a department
+// Admin-only route: Requires token verification and admin check
 router.post('/create-department', verifyToken, isAdmin, createDepartment);
 router.put('/update-department/:id', verifyToken, isAdmin, updateDepartment);
 router.delete('/delete-department/:id', verifyToken, isAdmin, deleteDepartment);
-router.get('/', getAllDepartments);
+
+//for fetching
+router.get('/departments', getAllDepartments);
 
 export default router;
-

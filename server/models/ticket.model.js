@@ -1,44 +1,42 @@
 import mongoose from 'mongoose';
 
 const ticketSchema = new mongoose.Schema({
-  service_request_no: {
-    type: String,
-    required: true,
-    unique: true,
+  date_started: {
+    type: Date,
+    default: Date.now
   },
   date_finished: {
-    type: Date,
+    type: Date
   },
   requested_by: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
+    required: true
   },
   conducted_by: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'User'
   },
   comment_box: {
     type: Boolean,
-    default: false,
+    default: false
   },
   action_taken: {
-    type: String,
+    type: String
   },
   status: {
     type: String,
-    enum: ['ongoing', 'pending', 'completed'],
-    required: true,
+    enum: ['pending', 'ongoing', 'completed'],
+    default: 'pending'
+  },
+  department: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Department'
   },
   comments: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'TicketComment',
-  }],
-  category: {
-    type: String,
-    enum: ['Service Request', 'Network Request', 'Web Request'],
-    required: true,
-  }
+    ref: 'TicketComment'
+  }]
 }, { timestamps: true });
 
 const Ticket = mongoose.model('Ticket', ticketSchema);
