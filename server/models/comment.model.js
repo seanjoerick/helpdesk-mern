@@ -6,19 +6,14 @@ const ticketCommentSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  request_no: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  device_no: {
+  deviceNo: {
     type: String
   },
-  description_problem: {
+  descriptionProblem: {
     type: String,
     required: true
   },
-  form_type: {
+  formType: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'FormType',
     required: true

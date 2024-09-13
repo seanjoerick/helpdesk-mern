@@ -6,6 +6,7 @@ import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
 import departmentRouter from './routes/department.route.js';
 import formRouter from './routes/form.route.js';
+import ticketRouter from './routes/ticket.route.js';
 import cookieParser from 'cookie-parser';
 
 // Hide sensitive information
@@ -37,6 +38,7 @@ app.use('/server/user', userRouter);
 app.use('/server/auth', authRouter);
 app.use('/server/department', departmentRouter);
 app.use('/server/form', formRouter);
+app.use('/server/ticket', ticketRouter);
 
 // Start the server and connect to MongoDB
 const startServer = async () => {
