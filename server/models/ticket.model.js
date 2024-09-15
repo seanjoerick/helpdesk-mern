@@ -15,7 +15,7 @@ const ticketSchema = new mongoose.Schema({
   },
   conducted_by: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'User',  // Refers to the admin (User) who is handling the ticket
   },
   action_taken: { 
     type: String,
@@ -25,7 +25,7 @@ const ticketSchema = new mongoose.Schema({
     enum: ['pending', 'ongoing', 'completed'],
     default: 'pending',
   },
-  comments: [{
+  comments: [{ // Refers to the user(who made request || tickets!)
     type: mongoose.Schema.Types.ObjectId,
     ref: 'TicketComment',
   }],

@@ -5,7 +5,6 @@ import cors from 'cors';
 import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
 import departmentRouter from './routes/department.route.js';
-import formRouter from './routes/form.route.js';
 import ticketRouter from './routes/ticket.route.js';
 import cookieParser from 'cookie-parser';
 
@@ -37,20 +36,19 @@ app.use((err, req, res, next) => {
 app.use('/server/user', userRouter);
 app.use('/server/auth', authRouter);
 app.use('/server/department', departmentRouter);
-app.use('/server/form', formRouter);
 app.use('/server/ticket', ticketRouter);
+
+app.listen(3000, () => {
+    console.log('Server is running on port 3000!');
+});
 
 // Start the server and connect to MongoDB
 const startServer = async () => {
     try {
         await mongoose.connect(process.env.MONGO);
         console.log('Connected to MongoDB');
-        app.listen(3000, () => {
-            console.log('Server is running on port 3000!');
-        });
     } catch (error) {
         console.log('Error Connecting to MongoDB:', error);
     }
 };
-
 startServer();

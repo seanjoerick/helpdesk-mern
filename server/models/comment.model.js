@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 
 const ticketCommentSchema = new mongoose.Schema({
+  formType: {
+    type: String,
+    enum: ['Web', 'Network', 'Service'],
+    required: true
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -11,11 +16,6 @@ const ticketCommentSchema = new mongoose.Schema({
   },
   descriptionProblem: {
     type: String,
-    required: true
-  },
-  formType: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'FormType',
     required: true
   }
 }, { timestamps: true });
