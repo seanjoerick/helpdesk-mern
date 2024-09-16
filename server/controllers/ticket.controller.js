@@ -46,3 +46,22 @@ export const createTicketComment = async (req, res, next) => {
     }
 }
 
+export const getAllTicketComments = async (req, res, next) => {
+    try {
+        const ticketComments = await TicketComment.find();
+        res.status(200).json({ticketComments}); 
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const getAllTickets = async (req, res, next) => {
+    try {
+        const Alltickets = await Ticket.find();
+        res.status(200).json({Alltickets}); 
+    } catch (error) {
+        next(error)
+    }
+}
+
+
