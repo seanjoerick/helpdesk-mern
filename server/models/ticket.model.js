@@ -8,7 +8,6 @@ const ticketSchema = new mongoose.Schema({
   },
   date_started: {
     type: Date,
-    default: Date.now,
   },
   date_finished: {
     type: Date,

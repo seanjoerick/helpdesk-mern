@@ -13,9 +13,11 @@ export const createTicketComment = async (req, res, next) => {
     try {
         //create new ticket   
         const newTicket = new Ticket({
-            requestNo: `REQ${Math.random().toString(36).substr(2, 5).toUpperCase()}`,
+            requestNo: Math.floor(100000 + Math.random() * 900000),
+            status: 'pending',
             comments: [],
-        });
+          });
+
         //save the ticket in ticketCollection
         await newTicket.save();
         
@@ -46,6 +48,70 @@ export const createTicketComment = async (req, res, next) => {
     }
 }
 
+export const takeActionOnTicket = async (req, res, next) => {
+    const { ticketId } = req.params; // Get ticketId from URL params
+
+    try {
+        // Find and update the ticket
+        const updatedTicket = await Ticket.findByIdAndUpdate(
+            ticketId,
+            {
+                $set: {
+                    status: 'ongoing',
+                    conducted_by: req.user.id,
+                    date_started: new Date(), 
+                }
+            },
+            { new: true } 
+        ).populate('comments'); 
+
+        if (!updatedTicket) {
+            return next(errorHandler(404, 'Ticket not found!'));
+        }
+
+        res.status(200).json({ message: 'Ticket updated successfully!', ticket: updatedTicket });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const takeActionOnTicketCompleted = async (req, res, next) => {
+    const { action_taken } = req.body;
+    const { ticketId } = req.params; // Get ticketId from URL params
+
+    try {
+        // Find and update the ticket
+        const updateToCompleted = await Ticket.findByIdAndUpdate(
+            ticketId,
+            {
+                $set: {
+                    status: 'completed',
+                    action_taken: action_taken,
+                    date_finished: new Date(), 
+                }
+            },
+            { new: true } 
+        ).populate('comments'); 
+
+        if (!updateToCompleted) {
+            return next(errorHandler(404, 'Ticket not found!'));
+        }
+
+        res.status(200).json({ message: 'Ticket updated successfully!', ticket: updateToCompleted });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+
+
+
+
+
+
+
+
 export const getAllTicketComments = async (req, res, next) => {
     try {
         const ticketComments = await TicketComment.find();
@@ -57,7 +123,7 @@ export const getAllTicketComments = async (req, res, next) => {
 
 export const getAllTickets = async (req, res, next) => {
     try {
-        const Alltickets = await Ticket.find();
+        const Alltickets = await Ticket.find().populate('comments');
         res.status(200).json({Alltickets}); 
     } catch (error) {
         next(error)
