@@ -16,7 +16,7 @@ const SignUp = () => {
     password: ''
   });
 
-  console.log(formData)
+  console.log(formData);
 
   const handleChange = (e) => {
     setFormData({
@@ -60,7 +60,11 @@ const SignUp = () => {
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-          <img className="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo" />
+          <img
+            className="w-8 h-8 mr-2"
+            src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
+            alt="logo"
+          />
           Help Desk System
         </a>
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
@@ -81,7 +85,7 @@ const SignUp = () => {
                   onChange={handleChange}
                   value={formData.department}
                 >
-                  <option value="">Select a department</option>
+                  {!formData.department && <option value="">Select a department</option>}
                   {departments.map((dept) => (
                     <option key={dept._id} value={dept._id}>
                       {dept.name}
@@ -156,13 +160,19 @@ const SignUp = () => {
               </p>
 
               {errorMessage && (
-                <div className="mt-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <div
+                  className="mt-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                  role="alert"
+                >
                   <span className="block sm:inline">{errorMessage}</span>
                 </div>
               )}
 
               {successMessage && (
-                <div className="mt-5 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                <div
+                  className="mt-5 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+                  role="alert"
+                >
                   <span className="block sm:inline">{successMessage}</span>
                 </div>
               )}

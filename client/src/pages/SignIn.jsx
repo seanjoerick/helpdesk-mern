@@ -21,7 +21,7 @@ const SignIn = () => {
 
     try {
       const res = await fetch('/server/auth/signin', {
-        method: 'POST', 
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
