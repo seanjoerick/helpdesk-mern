@@ -60,7 +60,7 @@ import { errorHandler } from '../utils/error.js';
         if (existingAdmin) return res.status(400).json({ success: false, message: 'Admin already exists!' });
       
 
-        const defaultDepartment = await Department.findOne({ name: 'Human Resources' });
+        const defaultDepartment = await Department.findOne({ name: 'IT' });
         if (!defaultDepartment) return res.status(400).json({ success: false, message: 'Default department not found!' });
         
         const departmentId = department || defaultDepartment._id;
