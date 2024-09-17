@@ -71,7 +71,7 @@ import { errorHandler } from '../utils/error.js';
             username,
             email,
             password: hashedPassword,
-            roles: 'admin',
+            roles: 'Admin',
             department: departmentId
         });
 
@@ -121,7 +121,7 @@ export const deletedUsers = async (req, res, next) => {
 
 export const getAllAdmins = async (req, res, next) => {
   try {
-    const admins = await User.find({ roles: 'admin'});
+    const admins = await User.find({ roles: 'Admin'});
 
     res.status(200).json({admins});
   } catch (error) {
@@ -131,7 +131,7 @@ export const getAllAdmins = async (req, res, next) => {
 
 export const getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find({ roles: 'user'});
+    const users = await User.find({ roles: 'User'});
     res.status(200).json({users});
   } catch (error) {
       next(error);
