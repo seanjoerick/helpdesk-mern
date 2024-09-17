@@ -104,12 +104,19 @@ export const takeActionOnTicketCompleted = async (req, res, next) => {
 };
 
 
-
-
-
-
-
-
+export const getPendingTickets = async (req, res, next) => {
+    try {
+        // Fetch tickets with status 'pending'
+        const pendingTickets = await Ticket.find({ status: 'pending' }).populate('comments');
+        
+        res.status(200).json({
+            message: 'Pending tickets fetched successfully!',
+            tickets: pendingTickets,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 
 
 export const getAllTicketComments = async (req, res, next) => {

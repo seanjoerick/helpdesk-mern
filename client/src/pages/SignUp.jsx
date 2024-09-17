@@ -1,188 +1,146 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import useDepartments from '../hooks/useDepartments';
-import Footer from '../components/Footer';  
+import Footer from '../components/Footer';
 
-export default function SignUp() {
-  const navigate = useNavigate();
-  const { departments, loading: loadingDepartments, error: departmentsError } = useDepartments();
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    department: ''
-  });
+const SignIn = () => {
+  // State to manage form input
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [remember, setRemember] = useState(false);
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value
-    });
-  };
-  
-  console.log(formData);
-
-  const handleSubmit = async (e) => {
+  // Handle form submission
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    setErrorMessage(null);
-    setSuccessMessage(null);
-    try {
-      const res = await fetch('/server/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await res.json();
-      setLoading(false);
-
-      if (res.ok) {
-        setSuccessMessage('Account successfully created! Redirecting to sign-in page...');
-        setTimeout(() => {
-          navigate('/sign-in');
-        }, 1000); 
-      } else {
-        setErrorMessage(data.message || 'An unexpected error occurred.');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      setErrorMessage('An unexpected error occurred.');
-      setLoading(false);
-    }
+    // Handle form logic here (e.g., API call)
+    console.log({
+      email,
+      password,
+      remember,
+    });
   };
 
   return (
-    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
-          alt="Help desk"
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUPT3pWQb7bPoo9f-blaLMAHC79K6eGSsTrQ&s"
-          className="mx-auto h-10 w-auto"
-        />
-        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-          Create an account
-        </h2>
-      </div>
+    <section className="bg-gray-50 dark:bg-gray-900">
+      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <a href="#" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+          <img className="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo" />
+          Help Desk System
+        </a>
+        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+          <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+              Create An Account
+            </h1>
+            <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
 
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="mt-4">
-            <label htmlFor="department" className="block text-sm font-medium leading-6 text-gray-900">
-              Department
-            </label>
-            <div className="mt-2">
+            <div>
+              <label htmlFor="departments" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+               Departments
+              </label>
               <select
-                id="department"
-                name="department"
-                value={formData.department} 
-                onChange={handleChange}
-                required
-                autoComplete="department-name"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              >
-                <option value="" disabled hidden>
-                  Select a department
-                </option>
-                {loadingDepartments ? (
-                  <option>Loading departments...</option>
-                ) : departmentsError ? (
-                  <option>Error loading departments</option>
-                ) : (
-                  departments.map(department => (
-                    <option key={department._id} value={department._id}>
-                      {department.name}
-                    </option>
-                  ))
-                )}
-              </select>
-            </div>
-          </div>
+                name="departments"
+                id="departments"
+                className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                onChange={(e) => setDepartment(e.target.value)} // Use state to store selected department
+                required>
+               <option value="">Select a department</option>
+               <option value="HR">HR</option>
+               <option value="IT">IT</option>
+               <option value="Sales">Sales</option>
+               <option value="Finance">Finance</option>
+               </select>
+               </div>
+                  
+              <div>
+                <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  name="username"
+                  id="username"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="username"
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
 
-          <div>
-            <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
-              Name
-            </label>
-            <div className="mt-2">
-              <input
-                id="username"
-                name="username"
-                type="text"
-                onChange={handleChange}
-                required
-                placeholder="e.g., John Smith"
-                autoComplete="username"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
 
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-              Email address
-            </label>
-            <div className="mt-2">
-              <input
-                id="email"
-                name="email"
-                type="email"
-                onChange={handleChange}
-                required
-                placeholder="name@gmail.com"
-                autoComplete="email"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
+              <div>
+                <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="name@gmail.com"
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
 
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-              Password
-            </label>
-            <div className="mt-2">
-              <input
-                id="password"
-                name="password"
-                type="password"
-                onChange={handleChange}
-                required
-                placeholder="Password"
-                autoComplete="current-password"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
+              <div>
+                <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  placeholder="••••••••"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
 
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-indigo-300">
-              {loading ? 'Signing Up...' : 'Sign Up'}
-            </button>
-          </div>
-        </form>
+              <div className="flex items-center justify-between">
+                <div className="flex items-start">
+                  <div className="flex items-center h-5">
+                    <input
+                      id="remember"
+                      type="checkbox"
+                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                      checked={remember}
+                      onChange={(e) => setRemember(e.target.checked)}
+                    />
+                  </div>
 
-        <p className="mt-2 text-center text-sm text-gray-500">
-          Already have an account?{' '}
-          <Link to="/sign-in" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-            Sign In
-          </Link>
-        </p>
+                  <div className="ml-3 text-sm">
+                    <label htmlFor="remember" className="text-gray-500 dark:text-gray-300">
+                      Remember me
+                    </label>
+                  </div>
+                </div>
+                <a href="#" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">
+                  Forgot password?
+                </a>
+              </div>
 
-        {errorMessage && (
-          <div className="mt-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-            <span className="block sm:inline">{errorMessage}</span>
-          </div>
-        )}
+              <button
+                type="submit"
+                 className="w-full text-white bg-primary-600 bg-indigo-700 hover:bg-indigo-500 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                Sign Up
+              </button>
 
-        {successMessage && (
-          <div className="mt-5 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-            <span className="block sm:inline">{successMessage}</span>
+              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                Already have an account {' '}
+                <Link to="/sign-in" className="font-medium text-primary-600 hover:underline dark:text-primary-500">
+                 Sign in
+                </Link>
+              </p>
+
+            </form>
           </div>
-        )}
+        </div>
       </div>
       <Footer />
-    </div>
+    </section>
   );
-}
+};
+
+export default SignIn;
