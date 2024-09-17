@@ -81,10 +81,13 @@ export const google = async (req, res, next) => {
             
             const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
             
+            const defaultDepartment = await Department.findOne({ name: 'IT' });
+
             const newUser = new User({
                 username: name,
                 email: email,
                 password: hashedPassword,
+                department: defaultDepartment,
                 avatar: googlePhotoUrl
             });
             
