@@ -35,7 +35,7 @@ app.use((err, req, res, next) => {
 // Define routes
 app.use('/server/user', userRouter);
 app.use('/server/auth', authRouter);
-app.use('/server/department', departmentRouter);
+app.use('/server/departments', departmentRouter);
 app.use('/server/ticket', ticketRouter);
 
 app.listen(3000, () => {

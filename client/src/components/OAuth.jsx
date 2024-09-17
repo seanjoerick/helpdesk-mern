@@ -47,8 +47,7 @@ export default function OAuth() {
             <button
                 onClick={handleGoogleClick}
                 type="button" 
-                className="flex w-full justify-center rounded-md bg-red-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 mt-1"
-            >
+                className="w-full text-white bg-primary-600 bg-red-700 hover:bg-red-500 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                 Continue with Google
             </button>
         </div>

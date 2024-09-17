@@ -9,6 +9,6 @@ router.put('/update-department/:id', verifyToken, isAdmin, updateDepartment);
 router.delete('/delete-department/:id', verifyToken, isAdmin, deleteDepartment);
 
 //for fetching
-router.get('/departments', getAllDepartments);
+router.get('/', getAllDepartments);
 
 export default router;

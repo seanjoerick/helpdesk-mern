@@ -43,6 +43,15 @@ export const updateDepartment = async (req, res, next) => {
     }
 };
 
+export const getAllDepartments = async (req, res, next) => {
+    try {
+        const departments = await Department.find();
+        res.status(200).json({ departments });
+    } catch (error) {
+        next(error); 
+    }
+};
+
 export const deleteDepartment = async (req, res, next) => {
     const { id } = req.params;
     try {
@@ -55,13 +64,3 @@ export const deleteDepartment = async (req, res, next) => {
         next(error);
     }
 } 
-
-export const getAllDepartments = async (req, res, next) => {
-    try {
-        const departments = await Department.find();
-        res.status(200).json({departments});    
-    } catch (error) {
-        next(error);
-    }
-};
-
