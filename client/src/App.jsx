@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import PrivateRoute from './components/PrivateRoute';
-import MainLayout from './pages/MainLayout';
+import MainLayout from './components/MainLayout';
 import Dashboard from './pages/Dashboard';
 import Accounts from './pages/Accounts';
 import Tickets from './pages/Tickets';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { signoutSuccess } from '../redux/user/userSlice';
-import { useNavigate, Link, Outlet } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import Footer from './Footer';
 
 const Sidebar = () => {
@@ -30,13 +30,10 @@ const Sidebar = () => {
   const isUser = currentUser?.roles.includes('User');
 
   return (
-    <div className="relative bg-blue-600">
-      <span className="absolute text-white text-4xl top-5 left-4 cursor-pointer">
-        <i className="bi bi-filter-left px-2 bg-gray-900 rounded-md" aria-label="Filter Menu"></i>
-      </span>
-      <div className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[300px] overflow-y-auto text-center bg-gray-900">
+    <div className="bg-gray-900 text-white w-64 flex-shrink-0">
+      <div className="p-4">
         <div className="text-gray-100 text-xl">
-          <div className="p-2.5 mt-1 flex items-center">
+          <div className="p-2.5 flex items-center">
             <img
               src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
               alt="Logo"
@@ -65,25 +62,25 @@ const Sidebar = () => {
         {/* Admin-Specific Links */}
         {isAdmin && (
           <>
-            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
+            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
               <i className="bi bi-house-door-fill"></i>
-              <Link to="/dashboard" className="text-[15px] ml-4 text-gray-200 font-bold">Dashboard</Link>
+              <Link to="/dashboard" className="text-[15px] ml-4">Dashboard</Link>
             </div>
-            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
+            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
               <i className="bi bi-box-arrow-in-right"></i>
-              <Link to="/accounts" className="text-[15px] ml-4 text-gray-200 font-bold">User Accounts</Link>
+              <Link to="/accounts" className="text-[15px] ml-4">User Accounts</Link>
             </div>
-            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
+            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
               <i className="bi bi-box-arrow-in-right"></i>
-              <Link to="/reports" className="text-[15px] ml-4 text-gray-200 font-bold">Reports</Link>
+              <Link to="/reports" className="text-[15px] ml-4">Reports</Link>
             </div>
-            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
+            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
               <i className="bi bi-box-arrow-in-right"></i>
-              <Link to="/tickets" className="text-[15px] ml-4 text-gray-200 font-bold">Tickets</Link>
+              <Link to="/tickets" className="text-[15px] ml-4">Tickets</Link>
             </div>
-            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
+            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
               <i className="bi bi-box-arrow-in-right"></i>
-              <Link to="/settings" className="text-[15px] ml-4 text-gray-200 font-bold">Settings</Link>
+              <Link to="/settings" className="text-[15px] ml-4">Settings</Link>
             </div>
           </>
         )}
@@ -91,20 +88,18 @@ const Sidebar = () => {
         {/* User-Specific Links */}
         {isUser && !isAdmin && (
           <>
-            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
+            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
               <i className="bi bi-box-arrow-in-right"></i>
-              <Link to="/create-ticket" className="text-[15px] ml-4 text-gray-200 font-bold">Create Ticket</Link>
+              <Link to="/create-ticket" className="text-[15px] ml-4">Create Ticket</Link>
             </div>
           </>
         )}
 
-        <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-white">
+        <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
           <i className="bi bi-box-arrow-in-right"></i>
-          <span onClick={handleLogout} className="text-[15px] ml-4 text-gray-200 font-bold" role="button" aria-label="Logout">Logout</span>
+          <span onClick={handleLogout} className="text-[15px] ml-4" role="button" aria-label="Logout">Logout</span>
         </div>
-              
       </div>
-      <Footer />
     </div>
   );
 };
