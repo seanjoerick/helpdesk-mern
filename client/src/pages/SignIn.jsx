@@ -34,7 +34,8 @@ const SignIn = () => {
 
       const data = await res.json();
       dispatch(signInSuccess(data));
-      navigate('/');
+
+      navigate('/')
     } catch (error) {
       dispatch(signInFailure('Network error: ' + error.message));
     }

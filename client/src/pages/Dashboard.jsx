@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function AdminDashboard() {
+export default function Dashboard() {
   return (
     <div>
       Welcome to your Dashboard
