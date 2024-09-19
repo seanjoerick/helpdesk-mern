@@ -138,4 +138,12 @@ export const getAllUsers = async (req, res, next) => {
   }
 }
 
+export const getAccounts = async (req, res, next) => {
+  try {
+    const accounts = await User.find();
+    res.status(200).json(accounts);
+  } catch (error) {
+    next(error)
+  }
+}
 

@@ -48,7 +48,7 @@ export default function Accounts() {
             }`}
             onClick={() => setActiveTab('Co-admins')}
           >
-            <FontAwesomeIcon icon={faUserTie} size="sm" /> Co-admins
+            <FontAwesomeIcon icon={faUserTie} size="sm" /> CO-ADMINS
           </div>
 
           <div
@@ -57,7 +57,7 @@ export default function Accounts() {
             }`}
             onClick={() => setActiveTab('Users')}
           >
-            <FontAwesomeIcon icon={faUser} size="sm" /> Users
+            <FontAwesomeIcon icon={faUser} size="sm" /> USERS
           </div>
 
           <div
@@ -66,7 +66,7 @@ export default function Accounts() {
             }`}
             onClick={() => setActiveTab('Accounts')}
           >
-            <FontAwesomeIcon icon={faFolder} size="sm" /> Accounts
+            <FontAwesomeIcon icon={faFolder} size="sm" /> ACCOUNTS
           </div>
         </div>
         <button
@@ -181,3 +181,5 @@ export default function Accounts() {
     </div>
   );
 }
+
+
