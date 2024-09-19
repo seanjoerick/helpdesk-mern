@@ -3,7 +3,7 @@ import React from 'react';
 export default function Reports() {
   return (
     <div>
-      <h2>Reports</h2>
+      <h2> Manage Reports</h2>
       {/* Display reports and statistics */}
     </div>
   );

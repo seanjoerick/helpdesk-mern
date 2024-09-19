@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import PrivateRoute from './components/PrivateRoute';
-import MainLayout from './components/MainLayout';
 import Dashboard from './pages/Dashboard';
 import Accounts from './pages/Accounts';
 import Tickets from './pages/Tickets';
@@ -11,6 +10,7 @@ import Settings from './pages/Settings';
 import Reports from './pages/Reports';
 import CreateTicket from './pages/CreateTicket';
 import Unauthorized from './pages/Unauthorized';
+import MainLayout from './components/Mainlayout';
 
 export default function App() {
   return (
@@ -26,7 +26,7 @@ export default function App() {
           <Route path='/' element={<MainLayout />}>
             {/* Admin-only routes */}
             <Route element={<PrivateRoute allowedRoles={['Admin']} />}>
-              <Route path='/dashboard' element={<Dashboard />} />
+              <Route path='dashboard' element={<Dashboard />} />
               <Route path='accounts' element={<Accounts />} />
               <Route path='reports' element={<Reports />} />
               <Route path='tickets' element={<Tickets />} />
