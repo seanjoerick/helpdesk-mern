@@ -1,5 +1,5 @@
 import express from 'express';
-import { test, updateUserProfile, signout, createAdmin, updateAdmin, getAllAdmins, getAllUsers, deletedUsers, deleteOwnAccount, getAccounts } from '../controllers/user.controller.js';
+import { test, updateUserProfile, signout, createAdmin, updateAdmin, deletedUsers, deleteOwnAccount, getAccounts } from '../controllers/user.controller.js';
 import { isAdmin, verifyToken } from '../utils/verifiedUser.js';
 
 const router = express.Router();
@@ -17,8 +17,6 @@ router.put('/update-admin/:id', verifyToken, isAdmin, updateAdmin);
 router.delete('/delete-account/:id', verifyToken, isAdmin, deletedUsers);
 
 //for fetching
-router.get('/admins', verifyToken, isAdmin, getAllAdmins);
-router.get('/users', verifyToken, isAdmin, getAllUsers);
-router.get('/accounts', verifyToken, isAdmin, getAccounts);
+router.get('/users', verifyToken, isAdmin, getAccounts);
 
 export default router;

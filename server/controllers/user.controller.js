@@ -118,32 +118,11 @@ export const deletedUsers = async (req, res, next) => {
   }
 };
 
-
-export const getAllAdmins = async (req, res, next) => {
-  try {
-    const admins = await User.find({ roles: 'Admin'});
-
-    res.status(200).json({admins});
-  } catch (error) {
-      next(error);
-  }
-}
-
-export const getAllUsers = async (req, res, next) => {
-  try {
-    const users = await User.find({ roles: 'User'});
-    res.status(200).json({users});
-  } catch (error) {
-      next(error);
-  }
-}
-
 export const getAccounts = async (req, res, next) => {
   try {
-    const accounts = await User.find();
-    res.status(200).json(accounts);
+    const accounts = await User.find().populate('department');
+    res.status(200).json({ accounts }); 
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
-
+};

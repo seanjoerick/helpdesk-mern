@@ -22,7 +22,7 @@ export const verifyToken = (req, res, next) => {
 
 export const isAdmin = (req, res, next) => {
   console.log('Request User:', req.user); // Debug log
-  if (req.user && req.user.roles &&  req.user.roles.includes('admin')) {
+  if (req.user && req.user.roles &&  req.user.roles.includes('Admin')) {
     return next();
   } else {
     return res.status(403).json({ success: false, message: 'Access denied!' });
