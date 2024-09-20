@@ -67,15 +67,15 @@ const Sidebar = () => {
             </div>
             <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
               <i className="bi bi-box-arrow-in-right"></i>
+              <Link to="/tickets" className="text-[15px] ml-4">Tickets</Link>
+            </div>
+            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
+              <i className="bi bi-box-arrow-in-right"></i>
               <Link to="/accounts" className="text-[15px] ml-4">User Accounts</Link>
             </div>
             <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
               <i className="bi bi-box-arrow-in-right"></i>
               <Link to="/reports" className="text-[15px] ml-4">Reports</Link>
-            </div>
-            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
-              <i className="bi bi-box-arrow-in-right"></i>
-              <Link to="/tickets" className="text-[15px] ml-4">Tickets</Link>
             </div>
             <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
               <i className="bi bi-box-arrow-in-right"></i>

@@ -8,15 +8,15 @@ router.get('/test', test);
 
 // Protected routes that require token verification
 router.put('/update/:id', verifyToken, updateUserProfile);
-router.delete('/delete/:id', verifyToken, deleteOwnAccount);
+router.delete('/delete-account/:id', verifyToken, deleteOwnAccount);
 router.post('/signout', signout);
 
 // Admin-only route: Requires token verification and admin check
-router.post('/create-admin', verifyToken, isAdmin, createAdmin);
-router.put('/update-admin/:id', verifyToken, isAdmin, updateAdmin);
-router.delete('/delete-account/:id', verifyToken, isAdmin, deletedUsers);
+router.post('/create-admin', createAdmin);
+router.put('/update-admin/:id', updateAdmin);
+router.delete('/delete-user/:id', deletedUsers);
 
 //for fetching
-router.get('/users', verifyToken, isAdmin, getAccounts);
+router.get('/users', getAccounts);
 
 export default router;
