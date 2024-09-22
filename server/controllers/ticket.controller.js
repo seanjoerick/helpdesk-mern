@@ -130,8 +130,8 @@ export const getAllTicketComments = async (req, res, next) => {
 
 export const getAllTickets = async (req, res, next) => {
     try {
-        const Alltickets = await Ticket.find().populate('comments');
-        res.status(200).json({Alltickets}); 
+        const tickets = await Ticket.find().populate('comments');
+        res.status(200).json({tickets}); 
     } catch (error) {
         next(error)
     }

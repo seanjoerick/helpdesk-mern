@@ -21,7 +21,7 @@ const useDepartments = () => {
         fetchDepartments();
     }, []); 
 
-    return { departments, loading, error };
+    return { departments, setDepartments, loading, error };
 };
 
 export default useDepartments;

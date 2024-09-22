@@ -14,7 +14,7 @@ router.post('/create-ticket', verifyToken, createTicketComment);
 
 router.get('/tickets/pending', getPendingTickets);
 router.get('/ticket-comments', getAllTicketComments);
-router.get('/all-tickets', getAllTickets);
+router.get('/alltickets', getAllTickets);
 
 
 
