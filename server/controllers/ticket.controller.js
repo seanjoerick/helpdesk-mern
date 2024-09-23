@@ -4,7 +4,7 @@ import { errorHandler } from "../utils/error.js";
 
 export const createTicketComment = async (req, res, next) => {
     const { deviceNo, formType, descriptionProblem } = req.body;
-    const userId = req.user.id //current user
+    const userId = req.user.id
 
     if(!deviceNo) return next(errorHandler(400, 'Device Number is required!'));
     if(!formType) return next(errorHandler(400, 'Form type is required!'));
@@ -37,7 +37,7 @@ export const createTicketComment = async (req, res, next) => {
 
         await newTicket.save();
         
-        const updatedTicket = await Ticket.findById(newTicket._id).populate('comments');
+        const updatedTicket = await Ticket.findById(newTicket._id);
 
         res.status(201).json({
             message: 'Ticket and comment created successfully!',
@@ -136,5 +136,6 @@ export const getAllTickets = async (req, res, next) => {
         next(error)
     }
 }
+
 
 

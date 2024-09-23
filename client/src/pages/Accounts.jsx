@@ -87,12 +87,14 @@ export default function Accounts() {
           </tbody>
         </table>
       </div>
-      {/* Pagination Controls */}
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={setCurrentPage}
-      />
+     {/* Pagination Controls */}
+     <div className="flex justify-end mb-6">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      </div>
     </div>
   );
 }
