@@ -7,7 +7,7 @@ const TakeActionModal = ({ ticket, onClose, onTakeAction }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="relative p-6 w-full max-w-[650px] max-h-full">
+      <div className="relative p-6 w-full max-w-[550px] max-h-full">
         {/* Modal content */}
         <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
           {/* Modal header */}
@@ -30,7 +30,13 @@ const TakeActionModal = ({ ticket, onClose, onTakeAction }) => {
               <strong>REQUEST NO:</strong> {ticket.requestNo}
             </div>
             <div className="mb-4">
-              <strong>FORM TYPE:</strong> {ticket.comments.length > 0 ? ticket.comments[0].formType : 'N/A'}
+               <strong>REQUESTED BY:</strong> {ticket.comments.length > 0 ? ticket.comments[0].user.username : 'N/A'}
+            </div>
+            <div className="mb-4">
+               <strong>LOCATION:</strong> {ticket.comments.length > 0 ? ticket.comments[0].user.department.name : 'N/A'}
+            </div>
+            <div className="mb-4">
+              <strong>FORM:</strong> {ticket.comments.length > 0 ? ticket.comments[0].formType : 'N/A'}
             </div>
             <div className="mb-4">
               <strong>DEVICE NO:</strong> {ticket.comments.length > 0 ? ticket.comments[0].deviceNo : 'N/A'}
@@ -42,14 +48,8 @@ const TakeActionModal = ({ ticket, onClose, onTakeAction }) => {
               <button
                 onClick={() => onTakeAction(ticket._id)}
                 className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-              >
+               >
                 Take Action
-              </button>
-              <button
-                onClick={onClose}
-                className="w-full text-black bg-gray-300 hover:bg-gray-400 rounded-lg text-sm px-5 py-2.5 text-center mt-2 md:mt-0"
-              >
-                Cancel
               </button>
             </div>
           </div>

@@ -76,8 +76,8 @@ export const takeActionOnTicket = async (req, res, next) => {
 };
 
 export const takeActionOnTicketCompleted = async (req, res, next) => {
-    const { action_taken } = req.body;
-    const { ticketId } = req.params; // Get ticketId from URL params
+    const { action_taken, recommendation } = req.body;
+    const { ticketId } = req.params;
 
     try {
         // Find and update the ticket
@@ -87,6 +87,7 @@ export const takeActionOnTicketCompleted = async (req, res, next) => {
                 $set: {
                     status: 'completed',
                     action_taken: action_taken,
+                    recommendation: recommendation,
                     date_finished: new Date(), 
                 }
             },
@@ -130,12 +131,20 @@ export const getAllTicketComments = async (req, res, next) => {
 
 export const getAllTickets = async (req, res, next) => {
     try {
-        const tickets = await Ticket.find().populate('comments');
-        res.status(200).json({tickets}); 
+      const tickets = await Ticket.find()
+        .populate({
+          path: 'comments',
+          populate: {
+            path: 'user',
+            populate: {
+              path: 'department' 
+            }
+          }
+        })
+  
+      res.status(200).json({ tickets });
     } catch (error) {
-        next(error)
+      next(error);
     }
-}
-
-
-
+  };
+  

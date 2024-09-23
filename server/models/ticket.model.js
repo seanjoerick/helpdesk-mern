@@ -19,6 +19,9 @@ const ticketSchema = new mongoose.Schema({
   action_taken: { 
     type: String,
   },
+  recommendation: { 
+    type: String,
+  },
   status: {
     type: String,
     enum: ['pending', 'ongoing', 'completed'],

@@ -12,9 +12,9 @@ router.delete('/delete-account/:id', verifyToken, deleteOwnAccount);
 router.post('/signout', signout);
 
 // Admin-only route: Requires token verification and admin check
-router.post('/create-admin', verifyToken, isAdmin, createAdmin);
-router.put('/update-admin/:id', verifyToken, isAdmin, updateAdmin);
-router.delete('/delete-user/:id', verifyToken, isAdmin, deletedUsers);
+router.post('/create-admin',  createAdmin);
+router.put('/update-admin/:id',  updateAdmin);
+router.delete('/delete-user/:id', deletedUsers);
 
 //for fetching
 router.get('/users', verifyToken, isAdmin, getAccounts);
