@@ -116,100 +116,97 @@ export default function Accounts() {
 
 
 import React from 'react';
-import { Bar } from 'react-chartjs-2';
-import { Chart, registerables } from 'chart.js';
-
-// Register Chart.js components
-Chart.register(...registerables);
+import BarChart from '../components/BarChart';
+import HorizontalBarChart from '../components/HorizontalBarChart';
 
 const Dashboard = () => {
-  // Data for each card
-  const pendingData = {
-    labels: ['Pending'],
-    datasets: [
-      {
-        label: 'Total Pending',
-        data: [100],
-        backgroundColor: 'rgba(255, 165, 0, 0.6)', // Orange
-      },
-    ],
-  };
-
-  const condemnedData = {
-    labels: ['Condemned'],
-    datasets: [
-      {
-        label: 'Total Condemned',
-        data: [100],
-        backgroundColor: 'rgba(0, 0, 255, 0.6)', // Blue
-      },
-    ],
-  };
-
-  const completedData = {
-    labels: ['Completed'],
-    datasets: [
-      {
-        label: 'Total Completed',
-        data: [100],
-        backgroundColor: 'rgba(0, 128, 0, 0.6)', // Green
-      },
-    ],
-  };
-
-  const adminsData = {
-    labels: ['Admins'],
-    datasets: [
-      {
-        label: 'Total Admins',
-        data: [5],
-        backgroundColor: 'rgba(148, 0, 211, 0.6)', // Violet
-      },
-    ],
-  };
-
-  const options = {
-    scales: {
-      y: {
-        beginAtZero: true,
-        max: 120, // Optional: set a maximum value to show some space above the bars
-      },
-    },
-  };
-
   return (
-    <div className="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {/* Card 1: Total Pending */}
-      <div className="flex flex-col items-center justify-between p-4 bg-orange-500 text-white rounded-lg shadow-md">
-        <h2 className="text-xl font-bold">Total Pending</h2>
-        <Bar data={pendingData} options={options} />
+    <div className="p-8 flex flex-col space-y-4"> {/* Main flex column layout */}
+      {/* Cards Section */}
+      <div className="flex flex-row justify-between space-x-2"> {/* Flex row for horizontal layout */}
+        {/* Card 1 */}
+        <div className="flex flex-col items-center justify-center p-2 bg-orange-400 text-white rounded-lg shadow-md h-32 w-1/4"> {/* Set width to 1/4 for uniformity */}
+          <h2 className="text-lg font-bold">Total Pending</h2>
+          <p className="text-3xl">100</p>
+        </div>
+
+        {/* Card 2 */}
+        <div className="flex flex-col items-center justify-center p-2 bg-blue-500 text-white rounded-lg shadow-md h-32 w-1/4">
+          <h2 className="text-lg font-bold">Total Condemned</h2>
+          <p className="text-3xl">100</p>
+        </div>
+
+        {/* Card 3 */}
+        <div className="flex flex-col items-center justify-center p-2 bg-green-500 text-white rounded-lg shadow-md h-32 w-1/4">
+          <h2 className="text-lg font-bold">Total Completed</h2>
+          <p className="text-3xl">100</p>
+        </div>
+
+        {/* Card 4 */}
+        <div className="flex flex-col items-center justify-center p-2 bg-violet-500 text-white rounded-lg shadow-md h-32 w-1/4">
+          <h2 className="text-lg font-bold">Total Admins</h2>
+          <p className="text-3xl">5</p>
+        </div>
       </div>
 
-      {/* Card 2: Total Condemned */}
-      <div className="flex flex-col items-center justify-between p-4 bg-blue-500 text-white rounded-lg shadow-md">
-        <h2 className="text-xl font-bold">Total Condemned</h2>
-        <Bar data={condemnedData} options={options} />
+      {/* Container for Latest Requests and Recent Activity */}
+      <div className="flex flex-row justify-between space-x-2"> {/* Flex row for horizontal layout */}
+        {/* Latest Requests Section */}
+        <div className="flex flex-col bg-gray-100 p-2 rounded-md shadow-md w-1/2"> {/* Set width for responsive layout */}
+          <h2 className="text-lg font-bold">Latest Request</h2>
+          <div className="mt-2 flex-grow">
+            <p><strong>Location:</strong> Human Resources</p>
+            <p><strong>Device:</strong> LAP-104</p>
+            <p><strong>Date:</strong> August 10, 2024</p>
+            <p><strong>Description:</strong> Connection</p>
+          </div>
+        </div>
+
+        {/* Recent Activity Section */}
+        <div className="flex flex-col bg-white p-4 rounded-md shadow-md w-1/2"> {/* Set width for responsive layout */}
+          <h2 className="text-lg font-bold border-b pb-2 mb-4">Recent Activity</h2>
+          <div className="mt-2 flex-grow overflow-y-auto max-h-64">
+            <ul className="space-y-2">
+              <li className="border-l-4 border-blue-500 p-2 hover:bg-blue-100 transition duration-150 ease-in-out">
+                <p><strong>Request #1234:</strong> Completed by John Doe</p>
+              </li>
+              <li className="border-l-4 border-red-500 p-2 hover:bg-red-100 transition duration-150 ease-in-out">
+                <p><strong>Request #1235:</strong> Condemned</p>
+              </li>
+              <li className="border-l-4 border-yellow-500 p-2 hover:bg-yellow-100 transition duration-150 ease-in-out">
+                <p><strong>Request #1236:</strong> Pending review</p>
+              </li>
+              <li className="border-l-4 border-green-500 p-2 hover:bg-green-100 transition duration-150 ease-in-out">
+                <p><strong>Request #1237:</strong> Approved</p>
+              </li>
+              <li className="border-l-4 border-gray-500 p-2 hover:bg-gray-100 transition duration-150 ease-in-out">
+                <p><strong>Request #1238:</strong> Under investigation</p>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
 
-      {/* Card 3: Total Completed */}
-      <div className="flex flex-col items-center justify-between p-4 bg-green-500 text-white rounded-lg shadow-md">
-        <h2 className="text-xl font-bold">Total Completed</h2>
-        <Bar data={completedData} options={options} />
+      {/* Bar Chart for Service Usage */}
+      <div className="flex flex-col bg-white p-2 rounded-md shadow-md">
+        <h2 className="text-lg font-bold">Service Usage</h2>
+        <div className="mt-2">
+          <BarChart />
+        </div>
       </div>
 
-      {/* Card 4: Total Admins */}
-      <div className="flex flex-col items-center justify-between p-4 bg-violet-500 text-white rounded-lg shadow-md">
-        <h2 className="text-xl font-bold">Total Admins</h2>
-        <Bar data={adminsData} options={options} />
+      {/* Total Monthly Requests Chart Section */}
+      <div className="flex flex-col bg-white p-2 rounded-md shadow-md">
+        <h2 className="text-lg font-bold">Total Monthly Requests</h2>
+        <div className="mt-2 flex-grow">
+          <HorizontalBarChart />
+        </div>
       </div>
     </div>
   );
 };
 
 export default Dashboard;
-
-
-
 
 
 

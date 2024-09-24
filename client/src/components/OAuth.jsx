@@ -32,7 +32,7 @@ export default function OAuth() {
 
             if (res.ok) {
                 dispatch(signInSuccess(data));
-                navigate('/');
+                navigate('/createticket');
             } else {
                 dispatch(signInFailure(data.message || 'Google sign-in failed.'));
             }

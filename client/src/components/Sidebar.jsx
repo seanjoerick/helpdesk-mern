@@ -9,8 +9,7 @@ const Sidebar = () => {
   const { currentUser } = useSelector(state => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
-  // State for the active link
+
   const [activeLink, setActiveLink] = useState('');
 
   const handleLogout = async () => {
@@ -33,18 +32,17 @@ const Sidebar = () => {
   const isAdmin = currentUser?.roles.includes('Admin');
   const isUser = currentUser?.roles.includes('User');
 
-  // Function to handle link click
   const handleLinkClick = (link, path) => {
     setActiveLink(link);
-    navigate(path); // Navigate programmatically
+    navigate(path);
   };
 
   return (
-    <div className="bg-gray-900 text-white w-72 flex-shrink-0"> {/* Increased width */}
+    <div className="fixed top-0 left-0 h-full bg-gray-900 text-white w-72 flex-shrink-0 overflow-y-auto"> {/* Set position fixed */}
       <div className="p-4">
         <div className="text-gray-100 text-xl">
           <div className="p-2.5 flex items-center">
-            <div className="w-8 h-8 rounded-md bg-blue-600" /> {/* Placeholder for logo */}
+            <div className="w-8 h-8 rounded-md bg-blue-600" />
             <h1 className="font-bold text-gray-200 text-[15px] ml-3">Help Desk</h1>
           </div>
           
