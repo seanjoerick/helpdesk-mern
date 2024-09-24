@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { signoutSuccess } from '../redux/user/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHouseUser, faTicketAlt, faUserFriends, faChartPie, faCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 const Sidebar = () => {
   const { currentUser } = useSelector(state => state.user);
@@ -42,11 +44,7 @@ const Sidebar = () => {
       <div className="p-4">
         <div className="text-gray-100 text-xl">
           <div className="p-2.5 flex items-center">
-            <img
-              src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-              alt="Logo"
-              className="w-8 h-8 rounded-md bg-blue-600"
-            />
+            <div className="w-8 h-8 rounded-md bg-blue-600" /> {/* Placeholder for logo */}
             <h1 className="font-bold text-gray-200 text-[15px] ml-3">Help Desk</h1>
           </div>
           
@@ -74,35 +72,35 @@ const Sidebar = () => {
               className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'dashboard' ? 'bg-blue-600' : ''}`}
               onClick={() => handleLinkClick('dashboard', '/dashboard')}
             >
-              <i className="bi bi-house-door-fill"></i>
+              <FontAwesomeIcon icon={faHouseUser} />
               <span className="text-[15px] ml-4">Dashboard</span>
             </div>
             <div 
               className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'tickets' ? 'bg-blue-600' : ''}`}
               onClick={() => handleLinkClick('tickets', '/tickets')}
             >
-              <i className="bi bi-box-arrow-in-right"></i>
+              <FontAwesomeIcon icon={faTicketAlt} />
               <span className="text-[15px] ml-4">Tickets</span>
             </div>
             <div 
               className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'accounts' ? 'bg-blue-600' : ''}`}
               onClick={() => handleLinkClick('accounts', '/accounts')}
             >
-              <i className="bi bi-box-arrow-in-right"></i>
+              <FontAwesomeIcon icon={faUserFriends} />
               <span className="text-[15px] ml-4">Accounts</span>
             </div>
             <div 
               className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'reports' ? 'bg-blue-600' : ''}`}
               onClick={() => handleLinkClick('reports', '/reports')}
             >
-              <i className="bi bi-box-arrow-in-right"></i>
+              <FontAwesomeIcon icon={faChartPie} />
               <span className="text-[15px] ml-4">Reports</span>
             </div>
             <div 
               className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'settings' ? 'bg-blue-600' : ''}`}
               onClick={() => handleLinkClick('settings', '/settings')}
             >
-              <i className="bi bi-box-arrow-in-right"></i>
+              <FontAwesomeIcon icon={faCog} />
               <span className="text-[15px] ml-4">Settings</span>
             </div>
           </>
@@ -115,7 +113,7 @@ const Sidebar = () => {
               className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'createTicket' ? 'bg-blue-600' : ''}`}
               onClick={() => handleLinkClick('createTicket', '/createticket')}
             >
-              <i className="bi bi-box-arrow-in-right"></i>
+              <FontAwesomeIcon icon={faTicketAlt} />
               <span className="text-[15px] ml-4">Create Ticket</span>
             </div>
           </>
@@ -125,7 +123,7 @@ const Sidebar = () => {
           className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'logout' ? 'bg-blue-600' : ''}`}
           onClick={() => { handleLinkClick('logout', '/'); handleLogout(); }}
         >
-          <i className="bi bi-box-arrow-in-right"></i>
+          <FontAwesomeIcon icon={faSignOutAlt} />
           <span className="text-[15px] ml-4" role="button" aria-label="Logout">Logout</span>
         </div>
       </div>
