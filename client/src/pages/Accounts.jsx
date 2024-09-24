@@ -4,35 +4,71 @@ import { faFolder, faEdit } from '@fortawesome/free-solid-svg-icons';
 import Pagination from '../components/Pagination';
 import useUsers from '../hooks/useUsers';
 import FilterDropdown from '../components/AccountFilterDropdown';
-import AddAccountModal from '../components/AddAccountModal'; // Import the modal
+import AddAccountModal from '../components/AddAccountModal'; 
+import SuccessModal from '../components/SuccessModal'; 
+import ErrorModal from '../components/ErrorModal';
+import useDepartments from '../hooks/useDepartments';
 
 export default function Accounts() {
-  const { users } = useUsers();
+  const { departments } = useDepartments();
+  const { users, setUsers } = useUsers(); 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 7;
   const [selectedRole, setSelectedRole] = useState('All');
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [showAddAccountModal, setShowAddAccountModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState(null);
 
   // Calculate total pages
   const totalPages = Math.ceil(users.length / itemsPerPage);
 
   // Filter users based on selected role
-  const filteredUsers = selectedRole === 'All'
-    ? users
+  const filteredUsers = selectedRole === 'All' 
+    ? users 
     : users.filter(user => user.roles.includes(selectedRole));
 
   const currentUsers = filteredUsers.slice(
-    (currentPage - 1) * itemsPerPage,
+    (currentPage - 1) * itemsPerPage, 
     currentPage * itemsPerPage
   );
+  
+  const handleAddAccount = async (newAccount) => {
+    try {
+        const response = await fetch('/server/user/create-users', { 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newAccount),
+        });
 
-  // Function to handle adding an account
-  const handleAddAccount = (newAccount) => {
-    // Implement the logic to add the new account
-    console.log("New account details:", newAccount);
-    // Close the modal after adding the account
-    setIsModalOpen(false);
-  };
+        if (!response.ok) {
+            const errorData = await response.json(); 
+            throw new Error(errorData.message || 'Failed to add account');
+        }
+
+        const addedAccount = await response.json();
+        // Update the users state with the new account
+        setUsers((prevUsers) => [
+            ...prevUsers,
+            {
+                ...addedAccount.user,
+                department: departments.find(dept => dept._id === newAccount.department)
+            },
+        ]);
+
+        setShowAddAccountModal(false);
+        setSuccessMessage('Account added successfully!');
+        setShowSuccessModal(true);
+    } catch (error) {
+        console.error('Error adding account:', error);
+        setErrorMessage(error.message);
+        setShowAddAccountModal(false); 
+    }
+};
+
+
 
   return (
     <div className="p-6">
@@ -47,7 +83,7 @@ export default function Accounts() {
           <button
             type="button"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
-            onClick={() => setIsModalOpen(true)} // Open the modal
+            onClick={() => setShowAddAccountModal(true)} 
           >
             + ADD ACCOUNT
           </button>
@@ -86,9 +122,7 @@ export default function Accounts() {
                   </span>
                 </td>
                 <td className="px-6 py-4">
-                  <button
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5"
-                  >
+                  <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5">
                     <FontAwesomeIcon icon={faEdit} />
                   </button>
                 </td>
@@ -97,6 +131,7 @@ export default function Accounts() {
           </tbody>
         </table>
       </div>
+
       {/* Pagination Controls */}
       <div className="flex justify-end mb-6">
         <Pagination
@@ -107,10 +142,26 @@ export default function Accounts() {
       </div>
 
       {/* Add Account Modal */}
-      {isModalOpen && (
+      {showAddAccountModal && (
         <AddAccountModal 
-          onClose={() => setIsModalOpen(false)} 
+          onClose={() => setShowAddAccountModal(false)} 
           onAddAccount={handleAddAccount} 
+        />
+      )}
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <SuccessModal 
+          message={successMessage} 
+          onClose={() => setShowSuccessModal(false)} 
+        />
+      )}
+
+      {/* Error Modal */}
+      {errorMessage && (
+        <ErrorModal 
+          message={errorMessage} 
+          onClose={() => setErrorMessage(null)} 
         />
       )}
     </div>
