@@ -10,7 +10,7 @@ import Settings from './pages/Settings';
 import Reports from './pages/Reports';
 import CreateTicket from './pages/CreateTicket';
 import Unauthorized from './pages/Unauthorized';
-import MainLayout from './components/Mainlayout';
+import MainLayout from './components/MainLayout';
 
 export default function App() {
   return (
@@ -27,15 +27,15 @@ export default function App() {
             {/* Admin-only routes */}
             <Route element={<PrivateRoute allowedRoles={['Admin']} />}>
               <Route path='dashboard' element={<Dashboard />} />
+              <Route path='tickets' element={<Tickets />} />
               <Route path='accounts' element={<Accounts />} />
               <Route path='reports' element={<Reports />} />
-              <Route path='tickets' element={<Tickets />} />
               <Route path='settings' element={<Settings />} />
             </Route>
 
             {/* User-only route */}
             <Route element={<PrivateRoute allowedRoles={['User']} />}>
-              <Route path='create-ticket' element={<CreateTicket />} />
+              <Route path='createticket' element={<CreateTicket />} />
             </Route>
           </Route>
         </Route>

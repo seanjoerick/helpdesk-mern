@@ -136,11 +136,13 @@ export const getAllTickets = async (req, res, next) => {
           path: 'comments',
           populate: {
             path: 'user',
+            select: 'username', 
             populate: {
-              path: 'department' 
+              path: 'department',
+              select: 'name'  
             }
           }
-        })
+        });
   
       res.status(200).json({ tickets });
     } catch (error) {

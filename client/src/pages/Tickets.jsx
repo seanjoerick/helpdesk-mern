@@ -1,35 +1,53 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolder, faCheckToSlot, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import { faFolder, faCheckToSlot, faCheckCircle, faTrash, faSearch } from '@fortawesome/free-solid-svg-icons';
 import useTickets from '../hooks/useTickets';
 import TakeActionModal from '../components/TakeActionModal';
 import CompletionActionModal from '../components/CompletionActionModal';
 import SuccessModal from '../components/SuccessModal';
+import Pagination from '../components/Pagination';
 
 export default function Tickets() {
   const { tickets, setTickets } = useTickets();
   const [isTakeActionModalOpen, setIsTakeActionModalOpen] = useState(false);
-  const [isCompletionModalOpen, setIsCompletionModalOpen] = useState(false); 
+  const [isCompletionModalOpen, setIsCompletionModalOpen] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 7;
+  const [searchTerm, setSearchTerm] = useState('');
 
+  // Filter tickets based on search term and status
   const filteredTickets = tickets.filter(ticket =>
-    ticket.status === 'pending' || ticket.status === 'ongoing' 
-  );
+    (ticket.status === 'pending' || ticket.status === 'ongoing') && 
+    (ticket.requestNo.includes(searchTerm) || 
+    ticket.comments?.some(comment => 
+    comment.deviceNo.includes(searchTerm) || 
+    (comment.user?.username && comment.user.username.includes(searchTerm)) ||
+    (comment.user?.department?.name && comment.user.department.name.includes(searchTerm)))));
+
+
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredTickets.length / itemsPerPage);
+
+  // Get current tickets for the current page
+  const indexOfLastTicket = currentPage * itemsPerPage;
+  const indexOfFirstTicket = indexOfLastTicket - itemsPerPage;
+  const currentTickets = filteredTickets.slice(indexOfFirstTicket, indexOfLastTicket);
 
   const handleTakeAction = async (ticketId) => {
     try {
       const res = await fetch(`/server/ticket/take-action/${ticketId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: 'ongoing' }), 
+        body: JSON.stringify({ status: 'ongoing' }),
       });
 
       if (!res.ok) throw new Error('Network response was not ok');
 
-      setTickets(prevTickets => 
-        prevTickets.map(ticket => 
+      setTickets(prevTickets =>
+        prevTickets.map(ticket =>
           ticket._id === ticketId ? { ...ticket, status: 'ongoing' } : ticket
         )
       );
@@ -80,6 +98,21 @@ export default function Tickets() {
           <FontAwesomeIcon icon={faFolder} size="lg" className="text-blue-500 me-2" />
           <h2 className="text-2xl font-bold">Manage Tickets</h2>
         </div>
+        <div className="flex items-center space-x-2 ml-auto">
+          {/* Search Input */}
+          <input
+            type="text"
+            placeholder="Search tickets..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {/* Search Button */}
+          <button className="flex items-center bg-blue-500 text-white px-4 py-2 rounded">
+            <FontAwesomeIcon icon={faSearch} className="me-2" />
+            Search
+          </button>
+        </div>
       </div>
 
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg mb-6">
@@ -97,12 +130,16 @@ export default function Tickets() {
             </tr>
           </thead>
           <tbody>
-            {filteredTickets.length > 0 ? (
-              filteredTickets.map((ticket, index) => (
+            {currentTickets.length > 0 ? (
+              currentTickets.map((ticket, index) => (
                 <tr key={ticket._id} className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'} border-b`}>
                   <td className="px-6 py-4 font-medium text-gray-900">{ticket.requestNo}</td>
-                  <td className="px-6 py-4 font-medium text-gray-900">{ticket.comments.length > 0 ? ticket.comments[0].formType : 'N/A'}</td>
-                  <td className="px-6 py-4 font-medium text-gray-900">{ticket.comments.length > 0 ? ticket.comments[0].user?.department.name : 'N/A'}</td>
+                  <td className="px-6 py-4 font-medium text-gray-900">
+                    {ticket.comments.length > 0 ? ticket.comments[0].formType : 'N/A'}
+                  </td>
+                  <td className="px-6 py-4 font-medium text-gray-900">
+                    {ticket.comments.length > 0 ? ticket.comments[0].user?.department.name : 'N/A'}
+                  </td>
                   <td className="px-6 py-4">{ticket.comments.length > 0 ? ticket.comments[0].user?.username : 'N/A'}</td>
                   <td className="px-6 py-4">{ticket.comments.length > 0 ? ticket.comments[0].deviceNo : 'N/A'}</td>
                   <td className="px-6 py-4">
@@ -111,25 +148,44 @@ export default function Tickets() {
                     </span>
                   </td>
                   <td className="px-6 py-4">
-                    {new Date(ticket.createdAt).toLocaleString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true })}
+                    {new Date(ticket.createdAt).toLocaleString('en-US', { 
+                      year: 'numeric', 
+                      month: '2-digit', 
+                      day: '2-digit', 
+                      hour: '2-digit', 
+                      minute: '2-digit', 
+                      hour12: true 
+                    })}
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex space-x-2">
-                      <button
-                        className={`text-white ${ticket.status === 'ongoing' ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-700 hover:bg-blue-800'} focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5`}
-                        onClick={() => openModal('take', ticket)}
-                        title="Take Action"
-                        disabled={ticket.status === 'ongoing'}
-                      >
-                        <FontAwesomeIcon icon={faCheckCircle} />
-                      </button>
+                  <td className="px-2 py-1">
+                    <div className="flex items-center space-x-1">
+                      {/* Take Action Button */}
+                      {ticket.status === 'pending' && (
+                        <button
+                          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-2 py-1"
+                          onClick={() => openModal('take', ticket)}
+                          title="Take Action"
+                        >
+                          <FontAwesomeIcon icon={faCheckCircle} />
+                        </button>
+                      )}
 
+                      {/* Complete Button */}
+                      {ticket.status === 'ongoing' && (
+                        <button
+                          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-2 py-1"
+                          onClick={() => openModal('complete', ticket)}
+                          title="Complete"
+                        >
+                          <FontAwesomeIcon icon={faCheckToSlot} />
+                        </button>
+                      )}
+
+                      {/* Delete Button */}
                       <button
-                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
-                        onClick={() => openModal('complete', ticket)}
-                        title="Complete"
+                        className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xs px-2 py-1"
                       >
-                        <FontAwesomeIcon icon={faCheckToSlot} />
+                        <FontAwesomeIcon icon={faTrash} />
                       </button>
                     </div>
                   </td>
@@ -137,7 +193,7 @@ export default function Tickets() {
               ))
             ) : (
               <tr>
-                <td colSpan="7" className="px-6 py-4 text-center">No tickets available.</td>
+                <td colSpan="8" className="px-6 py-4 text-center">No tickets available.</td>
               </tr>
             )}
           </tbody>
@@ -156,7 +212,7 @@ export default function Tickets() {
         <CompletionActionModal
           ticket={selectedTicket}
           onClose={closeCompletionModal}
-          onCompleteAction={handleCompleteAction} 
+          onCompleteAction={handleCompleteAction}
         />
       )}
 
@@ -166,6 +222,15 @@ export default function Tickets() {
           onClose={() => setIsSuccessModalOpen(false)}
         />
       )}
+
+       {/* Pagination Controls */}
+       <div className="flex justify-end mb-6">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      </div>
     </div>
   );
 }

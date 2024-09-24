@@ -45,10 +45,10 @@ const Sidebar = () => {
 
           {currentUser && (
             <div className="bg-gray-800 p-4 rounded-lg shadow-lg text-center">
-              <p className="text-white text-lg font-semibold mb-2">User Information</p>
+              <p className="text-white text-lg font-semibold mb-2">User Info</p>
               <div className="border-t border-gray-600 py-3">
-                <span className="font-bold text-blue-400 block text-xl mb-1">
-                  Role: {currentUser.roles.join(', ')}
+                <span className="font-bold text-blue-400 block text-l mb-1">
+                  {currentUser.username}
                 </span>
                 <span className="text-gray-400 block text-sm">{currentUser.email}</span>
               </div>
@@ -89,11 +89,11 @@ const Sidebar = () => {
           <>
             <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
               <i className="bi bi-box-arrow-in-right"></i>
-              <Link to="/create-ticket" className="text-[15px] ml-4">Create Ticket</Link>
+              <Link to="/createticket" className="text-[15px] ml-4">Create Ticket</Link>
             </div>
           </>
         )}
-
+        
         <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
           <i className="bi bi-box-arrow-in-right"></i>
           <span onClick={handleLogout} className="text-[15px] ml-4" role="button" aria-label="Logout">Logout</span>

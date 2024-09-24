@@ -13,7 +13,7 @@ const PrivateRoute = ({ allowedRoles = [] }) => {
 
   // Check if the user has one of the allowed roles
   const hasAccess = Array.isArray(allowedRoles) && allowedRoles.length > 0 
-    ? allowedRoles.some(role => currentUser.roles.includes(role))
+    ? allowedRoles.some(role => currentUser.roles?.includes(role)) // Using optional chaining
     : true; // If no roles are specified, grant access
 
   if (!hasAccess) {

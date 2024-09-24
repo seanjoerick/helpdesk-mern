@@ -8,22 +8,21 @@ import FilterDropdown from '../components/AccountFilterDropdown';
 export default function Accounts() {
   const { users } = useUsers();
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 7;
+  const itemsPerPage = 6;
   const [selectedRole, setSelectedRole] = useState('All');
-  
+
   // Calculate total pages
   const totalPages = Math.ceil(users.length / itemsPerPage);
-  
+
   // Filter users based on selected role
   const filteredUsers = selectedRole === 'All' 
     ? users 
     : users.filter(user => user.roles.includes(selectedRole));
-  
+
   const currentUsers = filteredUsers.slice(
     (currentPage - 1) * itemsPerPage, 
     currentPage * itemsPerPage
   );
-
 
   return (
     <div className="p-6">
@@ -75,9 +74,9 @@ export default function Accounts() {
                     {user.status}
                   </span>
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-2 py-1">
                   <button
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xs px-2 py-1"
                   >
                     <FontAwesomeIcon icon={faEdit} />
                   </button>
@@ -87,8 +86,9 @@ export default function Accounts() {
           </tbody>
         </table>
       </div>
-     {/* Pagination Controls */}
-     <div className="flex justify-end mb-6">
+
+      {/* Pagination Controls */}
+      <div className="flex justify-end mb-6">
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

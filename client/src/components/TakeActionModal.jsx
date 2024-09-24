@@ -26,29 +26,29 @@ const TakeActionModal = ({ ticket, onClose, onTakeAction }) => {
           </div>
           {/* Modal body */}
           <div className="p-4 md:p-5">
-            <div className="mb-4">
-              <strong>REQUEST NO:</strong> {ticket.requestNo}
-            </div>
-            <div className="mb-4">
-               <strong>REQUESTED BY:</strong> {ticket.comments.length > 0 ? ticket.comments[0].user.username : 'N/A'}
-            </div>
-            <div className="mb-4">
-               <strong>LOCATION:</strong> {ticket.comments.length > 0 ? ticket.comments[0].user.department.name : 'N/A'}
-            </div>
-            <div className="mb-4">
-              <strong>FORM:</strong> {ticket.comments.length > 0 ? ticket.comments[0].formType : 'N/A'}
-            </div>
-            <div className="mb-4">
-              <strong>DEVICE NO:</strong> {ticket.comments.length > 0 ? ticket.comments[0].deviceNo : 'N/A'}
-            </div>
-            <div className="mb-4">
-              <strong>DESCRIPTION:</strong> {ticket.comments.length > 0 ? ticket.comments[0].descriptionProblem : 'N/A'}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <strong>REQUESTED BY:</strong> {ticket.comments.length > 0 ? ticket.comments[0].user.username : 'N/A'}
+              </div>
+              <div>
+                <strong>LOCATION:</strong> {ticket.comments.length > 0 ? ticket.comments[0].user.department.name : 'N/A'}
+              </div>
+              <div>
+                <strong>FORM:</strong> {ticket.comments.length > 0 ? ticket.comments[0].formType : 'N/A'}
+              </div>
+              <div>
+                <strong>DEVICE NO:</strong> {ticket.comments.length > 0 ? ticket.comments[0].deviceNo : 'N/A'}
+              </div>
+              {/* Description in the middle spanning both columns */}
+              <div className="md:col-span-2">
+                <strong>DESCRIPTION:</strong> {ticket.comments.length > 0 ? ticket.comments[0].descriptionProblem : 'N/A'}
+              </div>
             </div>
             <div className="flex flex-col md:flex-row md:space-x-4 mt-4">
               <button
                 onClick={() => onTakeAction(ticket._id)}
                 className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-               >
+              >
                 Take Action
               </button>
             </div>

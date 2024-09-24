@@ -1,9 +1,12 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Sidebar from '../components/Sidebar'; 
 import Footer from '../components/Footer';
 
 const MainLayout = () => {
+  const currentUser = useSelector(state => state.user.currentUser);
+
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
@@ -18,7 +21,15 @@ const MainLayout = () => {
             alt="Help Desk Logo" 
             className="h-8 mr-4" 
           />
-          <h1 className="text-xl font-semibold text-gray-800">Admin View: Manage and Monitor Support Effectively</h1>
+          {currentUser && currentUser.roles.includes('Admin') ? (
+            <h1 className="text-xl font-semibold text-gray-800">
+              Admin View: Manage and Monitor Support Effectively
+            </h1>
+          ) : (
+            <h1 className="text-xl font-semibold text-gray-800">
+              User View: Create Ticket
+            </h1>
+          )}
         </header>
 
         {/* Page Content (rendered by Outlet) */}
