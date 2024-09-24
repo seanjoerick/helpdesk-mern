@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { signoutSuccess } from '../redux/user/userSlice';
 import { useNavigate, Link } from 'react-router-dom';
@@ -7,6 +7,9 @@ const Sidebar = () => {
   const { currentUser } = useSelector(state => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
+  // State for the active link
+  const [activeLink, setActiveLink] = useState('');
 
   const handleLogout = async () => {
     try {
@@ -28,8 +31,13 @@ const Sidebar = () => {
   const isAdmin = currentUser?.roles.includes('Admin');
   const isUser = currentUser?.roles.includes('User');
 
+  // Function to handle link click
+  const handleLinkClick = (link) => {
+    setActiveLink(link);
+  };
+
   return (
-    <div className="bg-gray-900 text-white w-64 flex-shrink-0">
+    <div className="bg-gray-900 text-white w-72 flex-shrink-0"> {/* Increased width */}
       <div className="p-4">
         <div className="text-gray-100 text-xl">
           <div className="p-2.5 flex items-center">
@@ -61,23 +69,38 @@ const Sidebar = () => {
         {/* Admin-Specific Links */}
         {isAdmin && (
           <>
-            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
+            <div 
+              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'dashboard' ? 'bg-blue-600' : 'hover:bg-blue-600'}`} // Active background
+              onClick={() => handleLinkClick('dashboard')}
+            >
               <i className="bi bi-house-door-fill"></i>
               <Link to="/dashboard" className="text-[15px] ml-4">Dashboard</Link>
             </div>
-            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
+            <div 
+              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'tickets' ? 'bg-blue-600' : 'hover:bg-blue-600'}`} // Active background
+              onClick={() => handleLinkClick('tickets')}
+            >
               <i className="bi bi-box-arrow-in-right"></i>
               <Link to="/tickets" className="text-[15px] ml-4">Tickets</Link>
             </div>
-            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
+            <div 
+              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'accounts' ? 'bg-blue-600' : 'hover:bg-blue-600'}`} // Active background
+              onClick={() => handleLinkClick('accounts')}
+            >
               <i className="bi bi-box-arrow-in-right"></i>
-              <Link to="/accounts" className="text-[15px] ml-4">User Accounts</Link>
+              <Link to="/accounts" className="text-[15px] ml-4">Accounts</Link>
             </div>
-            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
+            <div 
+              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'reports' ? 'bg-blue-600' : 'hover:bg-blue-600'}`} // Active background
+              onClick={() => handleLinkClick('reports')}
+            >
               <i className="bi bi-box-arrow-in-right"></i>
               <Link to="/reports" className="text-[15px] ml-4">Reports</Link>
             </div>
-            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
+            <div 
+              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'settings' ? 'bg-blue-600' : 'hover:bg-blue-600'}`} // Active background
+              onClick={() => handleLinkClick('settings')}
+            >
               <i className="bi bi-box-arrow-in-right"></i>
               <Link to="/settings" className="text-[15px] ml-4">Settings</Link>
             </div>
@@ -87,16 +110,22 @@ const Sidebar = () => {
         {/* User-Specific Links */}
         {isUser && !isAdmin && (
           <>
-            <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
+            <div 
+              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'createTicket' ? 'bg-blue-600' : 'hover:bg-blue-600'}`} // Active background
+              onClick={() => handleLinkClick('createTicket')}
+            >
               <i className="bi bi-box-arrow-in-right"></i>
               <Link to="/createticket" className="text-[15px] ml-4">Create Ticket</Link>
             </div>
           </>
         )}
         
-        <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600">
+        <div 
+          className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'logout' ? 'bg-blue-600' : 'hover:bg-blue-600'}`} // Active background
+          onClick={() => { handleLinkClick('logout'); handleLogout(); }}
+        >
           <i className="bi bi-box-arrow-in-right"></i>
-          <span onClick={handleLogout} className="text-[15px] ml-4" role="button" aria-label="Logout">Logout</span>
+          <span className="text-[15px] ml-4" role="button" aria-label="Logout">Logout</span>
         </div>
       </div>
     </div>

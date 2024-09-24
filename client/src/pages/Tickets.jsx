@@ -23,10 +23,11 @@ export default function Tickets() {
     (ticket.status === 'pending' || ticket.status === 'ongoing') && 
     (ticket.requestNo.includes(searchTerm) || 
     ticket.comments?.some(comment => 
-    comment.deviceNo.includes(searchTerm) || 
-    (comment.user?.username && comment.user.username.includes(searchTerm)) ||
-    (comment.user?.department?.name && comment.user.department.name.includes(searchTerm)))));
-
+      comment.deviceNo.includes(searchTerm) || 
+      (comment.user?.username && comment.user.username.includes(searchTerm)) ||
+      (comment.user?.department?.name && comment.user.department.name.includes(searchTerm)))
+    )
+  );
 
   // Calculate total pages
   const totalPages = Math.ceil(filteredTickets.length / itemsPerPage);
@@ -143,7 +144,7 @@ export default function Tickets() {
                   <td className="px-6 py-4">{ticket.comments.length > 0 ? ticket.comments[0].user?.username : 'N/A'}</td>
                   <td className="px-6 py-4">{ticket.comments.length > 0 ? ticket.comments[0].deviceNo : 'N/A'}</td>
                   <td className="px-6 py-4">
-                    <span className={`inline-block px-3 py-1 rounded-full text-white ${ticket.status === 'ongoing' ? 'bg-green-500' : 'bg-yellow-500'}`}>
+                    <span className={`inline-block px-2 py-1 rounded-full text-white ${ticket.status === 'ongoing' ? 'bg-green-500' : 'bg-yellow-500'}`}>
                       {ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1).toLowerCase()}
                     </span>
                   </td>
@@ -162,7 +163,7 @@ export default function Tickets() {
                       {/* Take Action Button */}
                       {ticket.status === 'pending' && (
                         <button
-                          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-2 py-1"
+                          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2"
                           onClick={() => openModal('take', ticket)}
                           title="Take Action"
                         >
@@ -173,7 +174,7 @@ export default function Tickets() {
                       {/* Complete Button */}
                       {ticket.status === 'ongoing' && (
                         <button
-                          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-2 py-1"
+                          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2"
                           onClick={() => openModal('complete', ticket)}
                           title="Complete"
                         >
@@ -183,7 +184,7 @@ export default function Tickets() {
 
                       {/* Delete Button */}
                       <button
-                        className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xs px-2 py-1"
+                        className="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2"
                       >
                         <FontAwesomeIcon icon={faTrash} />
                       </button>
@@ -223,8 +224,8 @@ export default function Tickets() {
         />
       )}
 
-       {/* Pagination Controls */}
-       <div className="flex justify-end mb-6">
+      {/* Pagination Controls */}
+      <div className="flex justify-end mb-6">
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

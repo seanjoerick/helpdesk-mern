@@ -1,20 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolder, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faFolder, faEdit, faPlus } from '@fortawesome/free-solid-svg-icons';
 import Pagination from '../components/Pagination';
 import useUsers from '../hooks/useUsers';
 import FilterDropdown from '../components/AccountFilterDropdown';
+import AddAccountModal from '../components/AddAccountModal';
 
 export default function Accounts() {
-  const { users } = useUsers();
+  const { users, setUsers, loading, error } = useUsers();
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const itemsPerPage = 7;
   const [selectedRole, setSelectedRole] = useState('All');
 
-  // Calculate total pages
-  const totalPages = Math.ceil(users.length / itemsPerPage);
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error loading accounts.</div>;
 
-  // Filter users based on selected role
+  const totalPages = Math.ceil(users.length / itemsPerPage);
   const filteredUsers = selectedRole === 'All' 
     ? users 
     : users.filter(user => user.roles.includes(selectedRole));
@@ -37,8 +38,9 @@ export default function Accounts() {
           <button
             type="button"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
+            aria-label="Add Account"
           >
-            + ADD ACCOUNT
+           <FontAwesomeIcon icon={faPlus}/> ADD ACCOUNT
           </button>
         </div>
       </div>
@@ -58,31 +60,38 @@ export default function Accounts() {
             </tr>
           </thead>
           <tbody>
-            {currentUsers.map(user => (
-              <tr key={user._id} className="odd:bg-white even:bg-gray-50 border-b">
-                <th scope="row" className="px-6 py-4 font-medium text-gray-900">
-                  {user.username}
-                </th>
-                <td className="px-6 py-4">{user.email}</td>
-                <td className="px-6 py-4">{user.department?.name || 'N/A'}</td>
-                <td className="px-6 py-4">
-                  <img src={user.avatar} alt="avatar" className="w-8 h-8 rounded-full" />
-                </td>
-                <td className="px-6 py-4">{user.roles.join(', ')}</td>
-                <td className="px-6 py-4">
-                  <span className={`inline-block px-3 py-1 rounded-full text-white ${user.status.toLowerCase() === 'active' ? 'bg-green-500' : 'bg-gray-500'}`}>
-                    {user.status}
-                  </span>
-                </td>
-                <td className="px-2 py-1">
-                  <button
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-xs px-2 py-1"
-                  >
-                    <FontAwesomeIcon icon={faEdit} />
-                  </button>
-                </td>
+            {currentUsers.length > 0 ? (
+              currentUsers.map(user => (
+                <tr key={user._id} className="odd:bg-white even:bg-gray-50 border-b">
+                  <th scope="row" className="px-6 py-4 font-medium text-gray-900">
+                    {user.username}
+                  </th>
+                  <td className="px-6 py-4">{user.email}</td>
+                  <td className="px-6 py-4">{user.department?.name || 'N/A'}</td>
+                  <td className="px-6 py-4">
+                    <img src={user.avatar} alt="avatar" className="w-8 h-8 rounded-full" />
+                  </td>
+                  <td className="px-6 py-4">{user.roles.join(', ')}</td>
+                  <td className="px-6 py-4">
+                    <span className={`inline-block px-2 py-1 rounded-full text-white ${user.status.toLowerCase() === 'active' ? 'bg-green-500' : 'bg-gray-500'}`}>
+                      {user.status}
+                    </span>
+                  </td>
+                  <td className="px-2 py-1">
+                    <button
+                      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2"
+                      aria-label={`Edit ${user.username}`}
+                    >
+                      <FontAwesomeIcon icon={faEdit} />
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="7" className="text-center py-4">No accounts found.</td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

@@ -205,7 +205,7 @@ const CompleteActionModal = ({ ticket, onClose, onCompleteAction }) => {
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitDisabled}
-                className={`w-full text-white ${isSubmitDisabled ? 'bg-gray-400' : 'bg-blue-700 hover:bg-blue-800'} focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
+                className={`w-full text-white ${isSubmitDisabled ? 'bg-gray-400' : 'bg-green-600 hover:bg-green-700'} focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800`}
               >
                 Mark as Completed
               </button>
