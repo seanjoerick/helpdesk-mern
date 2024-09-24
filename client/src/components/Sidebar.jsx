@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { signoutSuccess } from '../redux/user/userSlice';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
   const { currentUser } = useSelector(state => state.user);
@@ -32,8 +32,9 @@ const Sidebar = () => {
   const isUser = currentUser?.roles.includes('User');
 
   // Function to handle link click
-  const handleLinkClick = (link) => {
+  const handleLinkClick = (link, path) => {
     setActiveLink(link);
+    navigate(path); // Navigate programmatically
   };
 
   return (
@@ -70,39 +71,39 @@ const Sidebar = () => {
         {isAdmin && (
           <>
             <div 
-              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'dashboard' ? 'bg-blue-600' : 'hover:bg-blue-600'}`} // Active background
-              onClick={() => handleLinkClick('dashboard')}
+              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'dashboard' ? 'bg-blue-600' : ''}`}
+              onClick={() => handleLinkClick('dashboard', '/dashboard')}
             >
               <i className="bi bi-house-door-fill"></i>
-              <Link to="/dashboard" className="text-[15px] ml-4">Dashboard</Link>
+              <span className="text-[15px] ml-4">Dashboard</span>
             </div>
             <div 
-              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'tickets' ? 'bg-blue-600' : 'hover:bg-blue-600'}`} // Active background
-              onClick={() => handleLinkClick('tickets')}
+              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'tickets' ? 'bg-blue-600' : ''}`}
+              onClick={() => handleLinkClick('tickets', '/tickets')}
             >
               <i className="bi bi-box-arrow-in-right"></i>
-              <Link to="/tickets" className="text-[15px] ml-4">Tickets</Link>
+              <span className="text-[15px] ml-4">Tickets</span>
             </div>
             <div 
-              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'accounts' ? 'bg-blue-600' : 'hover:bg-blue-600'}`} // Active background
-              onClick={() => handleLinkClick('accounts')}
+              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'accounts' ? 'bg-blue-600' : ''}`}
+              onClick={() => handleLinkClick('accounts', '/accounts')}
             >
               <i className="bi bi-box-arrow-in-right"></i>
-              <Link to="/accounts" className="text-[15px] ml-4">Accounts</Link>
+              <span className="text-[15px] ml-4">Accounts</span>
             </div>
             <div 
-              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'reports' ? 'bg-blue-600' : 'hover:bg-blue-600'}`} // Active background
-              onClick={() => handleLinkClick('reports')}
+              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'reports' ? 'bg-blue-600' : ''}`}
+              onClick={() => handleLinkClick('reports', '/reports')}
             >
               <i className="bi bi-box-arrow-in-right"></i>
-              <Link to="/reports" className="text-[15px] ml-4">Reports</Link>
+              <span className="text-[15px] ml-4">Reports</span>
             </div>
             <div 
-              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'settings' ? 'bg-blue-600' : 'hover:bg-blue-600'}`} // Active background
-              onClick={() => handleLinkClick('settings')}
+              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'settings' ? 'bg-blue-600' : ''}`}
+              onClick={() => handleLinkClick('settings', '/settings')}
             >
               <i className="bi bi-box-arrow-in-right"></i>
-              <Link to="/settings" className="text-[15px] ml-4">Settings</Link>
+              <span className="text-[15px] ml-4">Settings</span>
             </div>
           </>
         )}
@@ -111,18 +112,18 @@ const Sidebar = () => {
         {isUser && !isAdmin && (
           <>
             <div 
-              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'createTicket' ? 'bg-blue-600' : 'hover:bg-blue-600'}`} // Active background
-              onClick={() => handleLinkClick('createTicket')}
+              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'createTicket' ? 'bg-blue-600' : ''}`}
+              onClick={() => handleLinkClick('createTicket', '/createticket')}
             >
               <i className="bi bi-box-arrow-in-right"></i>
-              <Link to="/createticket" className="text-[15px] ml-4">Create Ticket</Link>
+              <span className="text-[15px] ml-4">Create Ticket</span>
             </div>
           </>
         )}
         
         <div 
-          className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'logout' ? 'bg-blue-600' : 'hover:bg-blue-600'}`} // Active background
-          onClick={() => { handleLinkClick('logout'); handleLogout(); }}
+          className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'logout' ? 'bg-blue-600' : ''}`}
+          onClick={() => { handleLinkClick('logout', '/'); handleLogout(); }}
         >
           <i className="bi bi-box-arrow-in-right"></i>
           <span className="text-[15px] ml-4" role="button" aria-label="Logout">Logout</span>

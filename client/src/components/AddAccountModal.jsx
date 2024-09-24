@@ -1,77 +1,137 @@
 import React, { useState } from 'react';
-import useDepartments from '../hooks/useDepartments';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import useDepartments from '../hooks/useDepartments'; // Import your departments hook
 
 const AddAccountModal = ({ onClose, onAddAccount }) => {
   const { departments, loading, error } = useDepartments();
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [department, setDepartment] = useState('');
-  const [avatar, setAvatar] = useState('');
+  const [password, setPassword] = useState('');
+  const [selectedDepartment, setSelectedDepartment] = useState('');
+  const [selectedRole, setSelectedRole] = useState('User');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
     const newAccount = {
       username,
       email,
-      department,
-      avatar,
+      password,
+      department: selectedDepartment,
+      role: selectedRole,
     };
     onAddAccount(newAccount);
-    onClose(); // Close the modal after adding the account
-  };
-
-  if (loading) return <div>Loading departments...</div>;
-  if (error) return <div>{error}</div>;
+    // Reset fields after submission
+    setUsername('');
+    setEmail('');
+    setPassword('');
+    setSelectedDepartment('');
+    setSelectedRole('User'); 
+};
 
   return (
-    <div className="modal">
-      <h2>Add New Account</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Username:</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="relative p-6 w-full max-w-[550px] max-h-full">
+        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+          <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+              ADD ACCOUNT
+            </h3>
+            <button
+              type="button"
+              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              onClick={onClose}
+            >
+              <FontAwesomeIcon icon={faTimes} />
+              <span className="sr-only">Close modal</span>
+            </button>
+          </div>
+          <div className="p-4 md:p-5">
+            <form onSubmit={handleSubmit}>
+              {/* Department Dropdown First */}
+              <div className="mb-4">
+                <label className="block mb-2 text-sm font-medium text-gray-700">Department</label>
+                {loading ? (
+                  <p>Loading departments...</p>
+                ) : error ? (
+                  <p className="text-red-500">{error}</p>
+                ) : (
+                  <select
+                    value={selectedDepartment}
+                    onChange={(e) => setSelectedDepartment(e.target.value)}
+                    required
+                    className="border rounded-lg w-full p-2"
+                  >
+                    <option value="">Select Department</option>
+                    {departments.map((department) => (
+                      <option key={department._id} value={department._id}>
+                        {department.name}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+
+              {/* Role Selection */}
+              <div className="mb-4">
+                <label className="block mb-2 text-sm font-medium text-gray-700">Role</label>
+                <select
+                  value={selectedRole}
+                  onChange={(e) => setSelectedRole(e.target.value)}
+                  required
+                  className="border rounded-lg w-full p-2"
+                >
+                  <option value="User">User</option>
+                  <option value="Admin">Admin</option>
+                </select>
+              </div>
+
+              {/* Other Input Fields */}
+              <div className="mb-4">
+                <label className="block mb-2 text-sm font-medium text-gray-700">Username</label>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                  placeholder="Enter username"
+                  className="border rounded-lg w-full p-2"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block mb-2 text-sm font-medium text-gray-700">Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  placeholder="Enter email address"
+                  className="border rounded-lg w-full p-2"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block mb-2 text-sm font-medium text-gray-700">Password</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  placeholder="Enter password"
+                  className="border rounded-lg w-full p-2"
+                />
+              </div>
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                >
+                  Add Account
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Department:</label>
-          <select
-            value={department}
-            onChange={(e) => setDepartment(e.target.value)}
-            required
-          >
-            <option value="">Select Department</option>
-            {departments.map((dept) => (
-              <option key={dept._id} value={dept.name}>
-                {dept.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label>Avatar URL:</label>
-          <input
-            type="text"
-            value={avatar}
-            onChange={(e) => setAvatar(e.target.value)}
-          />
-        </div>
-        <button type="submit">Add Account</button>
-        <button type="button" onClick={onClose}>Cancel</button>
-      </form>
+      </div>
     </div>
   );
 };
