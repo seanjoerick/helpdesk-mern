@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { signoutSuccess } from '../redux/user/userSlice';
 import { useNavigate } from 'react-router-dom';
@@ -12,6 +12,23 @@ const Sidebar = () => {
 
   const [activeLink, setActiveLink] = useState('');
 
+  useEffect(() => {
+    // Determine the default active link based on user role
+    const storedActiveLink = localStorage.getItem('activeLink');
+    
+    if (storedActiveLink) {
+      setActiveLink(storedActiveLink);
+    } else if (currentUser?.roles.includes('Admin')) {
+      setActiveLink('dashboard');
+      localStorage.setItem('activeLink', 'dashboard');
+      navigate('/dashboard');  // Automatically navigate to the dashboard after login
+    } else if (currentUser?.roles.includes('User')) {
+      setActiveLink('createTicket');
+      localStorage.setItem('activeLink', 'createTicket');
+      navigate('/createticket');  // Automatically navigate to create ticket for User role
+    }
+  }, [currentUser, navigate]);
+
   const handleLogout = async () => {
     try {
       const res = await fetch('/server/user/signout', {
@@ -22,6 +39,7 @@ const Sidebar = () => {
         console.error(data.message);
       } else {
         dispatch(signoutSuccess());
+        localStorage.removeItem('activeLink');  // Clear active link on logout
         navigate('/sign-in');
       }
     } catch (error) {
@@ -34,6 +52,7 @@ const Sidebar = () => {
 
   const handleLinkClick = (link, path) => {
     setActiveLink(link);
+    localStorage.setItem('activeLink', link);  // Store the active link in localStorage
     navigate(path);
   };
 
@@ -45,7 +64,7 @@ const Sidebar = () => {
             <div className="w-8 h-8 rounded-md bg-blue-600" />
             <h1 className="font-bold text-gray-200 text-[15px] ml-3">Help Desk</h1>
           </div>
-          
+
           <div className="my-2 bg-gray-600 h-[1px]"></div>
 
           {currentUser && (
@@ -118,8 +137,8 @@ const Sidebar = () => {
         )}
         
         <div 
-          className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'logout' ? 'bg-blue-600' : ''}`}
-          onClick={() => { handleLinkClick('logout', '/'); handleLogout(); }}
+          className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer`}
+          onClick={handleLogout} 
         >
           <FontAwesomeIcon icon={faSignOutAlt} />
           <span className="text-[15px] ml-4" role="button" aria-label="Logout">Logout</span>

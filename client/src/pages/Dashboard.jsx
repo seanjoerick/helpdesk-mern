@@ -47,7 +47,15 @@ const Dashboard = () => {
                             {latestTicket.status.charAt(0).toUpperCase() + latestTicket.status.slice(1)} {/* Capitalize first letter */}
                         </span>
                     </p>
-                    <p><strong>Date: </strong>{latestTicket.createdAt ? new Date(latestTicket.createdAt).toLocaleDateString() : 'N/A'}</p>
+                    <p><strong>Date: </strong>
+                        {latestTicket.createdAt 
+                            ? new Date(latestTicket.createdAt).toLocaleDateString('en-US', {
+                                  month: 'long',
+                                  day: 'numeric',
+                                  year: 'numeric'
+                              }) 
+                            : 'N/A'}
+                    </p>
                     <p><strong>Description: </strong>{latestTicket.comments[0]?.descriptionProblem || 'No description provided.'}</p>
                 </div>
             ) : (
