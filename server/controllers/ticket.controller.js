@@ -150,3 +150,59 @@ export const getAllTickets = async (req, res, next) => {
     }
   };
   
+
+  export const getLatestRequest = async (req, res, next) => {
+    try {
+        const latestTicket = await Ticket.findOne()
+            .sort({ createdAt: -1 })
+            .populate({
+                path: 'comments',
+                populate: {
+                    path: 'user',
+                    select: 'username', 
+                    populate: {
+                        path: 'department',
+                        select: 'name'  
+                    }
+                }
+            });
+
+        if (!latestTicket) {
+            return res.status(404).json({ message: 'No tickets found!' });
+        }
+
+        res.status(200).json({
+            message: 'Latest request fetched successfully!',
+            ticket: latestTicket,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getTotalPending = async (req, res, next) => {
+    try {
+        const totalPending = await Ticket.countDocuments({ status: 'pending' });
+
+        res.status(200).json({
+            message: 'Total pending tickets fetched successfully!',
+            count: totalPending,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const getTotalCompleted = async (req, res, next) => {
+    try {
+        const totalCompleted = await Ticket.countDocuments({ status: 'completed' });
+
+        res.status(200).json({
+            message: 'Total completed tickets fetched successfully!',
+            count: totalCompleted,
+        });
+    } catch (error) {
+        next(error);
+    }
+};

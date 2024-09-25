@@ -1,5 +1,5 @@
 import express from 'express';
-import { test, updateUserProfile, signout, createUsers, deletedUsers, deleteOwnAccount, getAccounts } from '../controllers/user.controller.js';
+import { test, updateUserProfile, signout, createUsers, deletedUsers, deleteOwnAccount, getAccounts, getAdminCount } from '../controllers/user.controller.js';
 import { isAdmin, verifyToken } from '../utils/verifiedUser.js';
 
 const router = express.Router();
@@ -18,5 +18,6 @@ router.delete('/delete-user/:id', deletedUsers);
 
 //for fetching
 router.get('/users', getAccounts);
+router.get('/admincount', getAdminCount);
 
 export default router;

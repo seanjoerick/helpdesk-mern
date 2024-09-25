@@ -15,7 +15,7 @@ export default function Tickets() {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 7;
+  const itemsPerPage = 9;
   const [searchTerm, setSearchTerm] = useState('');
 
   // Filter tickets based on search term and status
@@ -25,10 +25,11 @@ export default function Tickets() {
     ticket.comments?.some(comment => 
       comment.deviceNo.includes(searchTerm) || 
       (comment.user?.username && comment.user.username.includes(searchTerm)) ||
-      (comment.user?.department?.name && comment.user.department.name.includes(searchTerm)))
-    )
+      (comment.user?.department?.name && comment.user.department.name.includes(searchTerm)) ||
+      (comment.descriptionProblem && comment.descriptionProblem.includes(searchTerm)) 
+    ))
   );
-
+  
   // Calculate total pages
   const totalPages = Math.ceil(filteredTickets.length / itemsPerPage);
 
@@ -144,7 +145,8 @@ export default function Tickets() {
                   <td className="px-6 py-4">{ticket.comments.length > 0 ? ticket.comments[0].user?.username : 'N/A'}</td>
                   <td className="px-6 py-4">{ticket.comments.length > 0 ? ticket.comments[0].deviceNo : 'N/A'}</td>
                   <td className="px-6 py-4">
-                    <span className={`inline-block px-2 py-1 rounded-full text-white ${ticket.status === 'ongoing' ? 'bg-green-500' : 'bg-yellow-500'}`}>
+                    {/* Status Text with Color */}
+                    <span className={`font-medium ${ticket.status === 'ongoing' ? 'text-green-500' : 'text-yellow-500'}`}>
                       {ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1).toLowerCase()}
                     </span>
                   </td>

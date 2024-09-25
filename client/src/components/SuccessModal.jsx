@@ -4,12 +4,10 @@ import { faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 const SuccessModal = ({ message, onClose }) => {
   useEffect(() => {
-    // Set a timer to automatically close the modal after 5 seconds
     const timer = setTimeout(() => {
       onClose();
-    }, 1500);
-
-    // Clean up the timer on component unmount
+    }, 1000);
+    
     return () => clearTimeout(timer);
   }, [onClose]);
 

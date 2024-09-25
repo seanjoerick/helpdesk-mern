@@ -126,3 +126,16 @@ export const getAccounts = async (req, res, next) => {
         next(error);
     }
 };
+
+export const getAdminCount = async (req, res, next) => {
+    try {
+        const adminCount = await User.countDocuments({ roles: 'Admin' });
+
+        res.status(200).json({
+            message: 'Admin count fetched successfully!',
+            count: adminCount,
+        });
+    } catch (error) {
+        next(error);
+    }
+};

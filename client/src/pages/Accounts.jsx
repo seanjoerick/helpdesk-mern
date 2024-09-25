@@ -32,43 +32,41 @@ export default function Accounts() {
     (currentPage - 1) * itemsPerPage, 
     currentPage * itemsPerPage
   );
-  
+
   const handleAddAccount = async (newAccount) => {
     try {
-        const response = await fetch('/server/user/create-users', { 
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newAccount),
-        });
+      const response = await fetch('/server/user/create-users', { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newAccount),
+      });
 
-        if (!response.ok) {
-            const errorData = await response.json(); 
-            throw new Error(errorData.message || 'Failed to add account');
-        }
+      if (!response.ok) {
+        const errorData = await response.json(); 
+        throw new Error(errorData.message || 'Failed to add account');
+      }
 
-        const addedAccount = await response.json();
-        // Update the users state with the new account
-        setUsers((prevUsers) => [
-            ...prevUsers,
-            {
-                ...addedAccount.user,
-                department: departments.find(dept => dept._id === newAccount.department)
-            },
-        ]);
+      const addedAccount = await response.json();
+      // Update the users state with the new account
+      setUsers((prevUsers) => [
+        ...prevUsers,
+        {
+          ...addedAccount.user,
+          department: departments.find(dept => dept._id === newAccount.department)
+        },
+      ]);
 
-        setShowAddAccountModal(false);
-        setSuccessMessage('Account added successfully!');
-        setShowSuccessModal(true);
+      setShowAddAccountModal(false);
+      setSuccessMessage('Account added successfully!');
+      setShowSuccessModal(true);
     } catch (error) {
-        console.error('Error adding account:', error);
-        setErrorMessage(error.message);
-        setShowAddAccountModal(false); 
+      console.error('Error adding account:', error);
+      setErrorMessage(error.message);
+      setShowAddAccountModal(false); 
     }
-};
-
-
+  };
 
   return (
     <div className="p-6">
@@ -113,16 +111,17 @@ export default function Accounts() {
                 <td className="px-6 py-4">{user.email}</td>
                 <td className="px-6 py-4">{user.department?.name || 'N/A'}</td>
                 <td className="px-6 py-4">
-                  <img src={user.avatar} alt="avatar" className="w-8 h-8 rounded-full" />
+                  <img src={user.avatar} alt="avatar" className="w-7 h-7 rounded-full" />
                 </td>
                 <td className="px-6 py-4">{user.roles.join(', ')}</td>
                 <td className="px-6 py-4">
-                  <span className={`inline-block px-3 py-1 rounded-full text-white ${user.status.toLowerCase() === 'active' ? 'bg-green-500' : 'bg-gray-500'}`}>
+                  {/* Status Display as Text with Color */}
+                  <span className={`font-medium ${user.status.toLowerCase() === 'active' ? 'text-green-500' : 'text-gray-500'}`}>
                     {user.status}
                   </span>
                 </td>
                 <td className="px-6 py-4">
-                  <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5">
+                  <button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2">
                     <FontAwesomeIcon icon={faEdit} />
                   </button>
                 </td>
