@@ -5,24 +5,24 @@ import moment from "moment";
 
 export const createTicketComment = async (req, res, next) => {
     const { deviceNo, formType, descriptionProblem } = req.body;
-    const userId = req.user.id
+    const userId = req.user.id;
 
-    if(!deviceNo) return next(errorHandler(400, 'Device Number is required!'));
-    if(!formType) return next(errorHandler(400, 'Form type is required!'));
-    if(!descriptionProblem) return next(errorHandler(400, 'Description of the problem is required!'));
+    if (!deviceNo) return next(errorHandler(400, 'Device Number is required!'));
+    if (!formType) return next(errorHandler(400, 'Form type is required!'));
+    if (!descriptionProblem) return next(errorHandler(400, 'Description of the problem is required!'));
 
     try {
-        //create new ticket   
+        // Create new ticket   
         const newTicket = new Ticket({
             requestNo: Math.floor(100000 + Math.random() * 900000),
             status: 'pending',
+            user: userId, // Associate the ticket with the user
             comments: [],
-          });
+        });
 
-        //save the ticket in ticketCollection
         await newTicket.save();
         
-        //create ticketcomment from user
+        // Create ticket comment from user
         const newTicketComment = new TicketComment({
             user: userId,
             deviceNo: deviceNo,
@@ -30,24 +30,24 @@ export const createTicketComment = async (req, res, next) => {
             formType: formType,
         });
         
-        //save the ticket in ticketCommentCollection
         await newTicketComment.save();
 
-        //push the newticket comments in the ticket collection!
+        // Push the new comment's ID into the ticket's comments array
         newTicket.comments.push(newTicketComment._id);
 
         await newTicket.save();
         
-        const updatedTicket = await Ticket.findById(newTicket._id);
+        const updatedTicket = await Ticket.findById(newTicket._id).populate('comments');
 
         res.status(201).json({
             message: 'Ticket and comment created successfully!',
             ticket: updatedTicket,
         });
     } catch (error) {
-        next(error)
+        next(error);
     }
-}
+};
+
 
 export const takeActionOnTicket = async (req, res, next) => {
     const { ticketId } = req.params; // Get ticketId from URL params
@@ -132,25 +132,28 @@ export const getAllTicketComments = async (req, res, next) => {
 
 export const getAllTickets = async (req, res, next) => {
     try {
-      const tickets = await Ticket.find()
-        .populate({
-          path: 'comments',
-          populate: {
-            path: 'user',
-            select: 'username', 
-            populate: {
-              path: 'department',
-              select: 'name'  
-            }
-          }
-        });
-  
-      res.status(200).json({ tickets });
+        const tickets = await Ticket.find()
+            .populate({
+                path: 'conducted_by', 
+                select: 'username',  
+            })
+            .populate({
+                path: 'comments',
+                populate: {
+                    path: 'user',
+                    select: 'username',
+                    populate: {
+                        path: 'department',
+                        select: 'name'  
+                    }
+                }
+            });
+
+        res.status(200).json({ tickets });
     } catch (error) {
-      next(error);
+        next(error);
     }
-  };
-  
+};
 
   export const getLatestRequest = async (req, res, next) => {
     try {
@@ -254,6 +257,53 @@ export const getTotalCommentsThisMonth = async (req, res, next) => {
         res.status(200).json({
             message: 'Total comments for the current month fetched successfully!',
             total: totalCommentsThisMonth,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getMyPendingTickets = async (req, res, next) => {
+    const userId = req.user.id;
+
+    try {
+        const pendingTickets = await Ticket.find({ 
+            user: userId, 
+            status: 'pending'
+        }).populate({
+            path: 'comments',
+            populate: {
+                path: 'user',
+                select: 'username', 
+                populate: {
+                    path: 'department',
+                    select: 'name'  
+                }
+            }
+        });
+
+        res.status(200).json({
+            message: 'My pending tickets fetched successfully!',
+            tickets: pendingTickets,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const getMyPendingTicketsCount = async (req, res, next) => {
+    const userId = req.user.id; 
+
+    try {
+        const pendingTicketCount = await Ticket.countDocuments({ 
+            user: userId, 
+            status: 'pending'
+        });
+
+        res.status(200).json({
+            message: 'Count of my pending tickets fetched successfully!',
+            count: pendingTicketCount, 
         });
     } catch (error) {
         next(error);
