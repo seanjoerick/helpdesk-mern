@@ -113,13 +113,6 @@ const Sidebar = () => {
               <FontAwesomeIcon icon={faChartPie} />
               <span className="text-[15px] ml-4">Reports</span>
             </div>
-            <div 
-              className={`p-3 mt-3 flex items-center rounded-md duration-300 cursor-pointer ${activeLink === 'settings' ? 'bg-blue-600' : ''}`}
-              onClick={() => handleLinkClick('settings', '/settings')}
-            >
-              <FontAwesomeIcon icon={faCog} />
-              <span className="text-[15px] ml-4">Settings</span>
-            </div>
           </>
         )}
 

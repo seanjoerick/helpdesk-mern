@@ -6,7 +6,6 @@ import PrivateRoute from './components/PrivateRoute';
 import Dashboard from './pages/Dashboard';
 import Accounts from './pages/Accounts';
 import Tickets from './pages/Tickets';
-import Settings from './pages/Settings';
 import Reports from './pages/Reports';
 import CreateTicket from './pages/CreateTicket';
 import Unauthorized from './pages/Unauthorized';
@@ -30,7 +29,6 @@ export default function App() {
               <Route path='tickets' element={<Tickets />} />
               <Route path='accounts' element={<Accounts />} />
               <Route path='reports' element={<Reports />} />
-              <Route path='settings' element={<Settings />} />
             </Route>
 
             {/* User-only route */}

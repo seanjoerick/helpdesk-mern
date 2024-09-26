@@ -61,47 +61,11 @@ const Dashboard = () => {
             ) : (
                 <p>No latest request available.</p>
             )}
-
-            {/* Latest Requests */}
-            <div className="p-4 bg-white rounded shadow">
-                <h2 className="font-bold text-lg">Latest Activities</h2>
-                <div className="space-y-4">
-                    {/* Latest Requests Table */}
-                    <table className="min-w-full border-collapse mb-4">
-                        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
-                                <th className="px-6 py-4 text-left">Request No</th>
-                                <th className="px-6 py-4 text-left">Location</th>
-                                <th className="px-6 py-4 text-left">Requested By</th>
-                                <th className="px-6 py-4 text-left">Action Taken</th>
-                                <th className="px-6 py-4 text-left">Completed By</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {/* Sample Rows for Latest Requests */}
-                            {Array.from({ length: 5 }).map((_, index) => {
-                                return (
-                                    <tr key={index} className="hover:bg-gray-100">
-                                        <td className="px-6 py-4">{340811 + index}</td>
-                                        <td className="px-6 py-4">Location {index + 1}</td>
-                                        <td className="px-6 py-4">Ryan</td>
-                                        <td className="px-6 py-4">
-                                            <span>Fix the computer</span>
-                                        </td>
-                                        <td className="px-6 py-4">John Doe</td>
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            {/* Graphs Section */}
-            <div className="flex flex-wrap justify-between gap-4">
+             {/* Graphs Section */}
+             <div className="flex flex-wrap justify-between gap-4">
                 {/* Bar Graph */}
                 <div className="flex-1 p-4 bg-white rounded shadow">
-                    <h2 className="font-bold text-lg">Total Monthly Requests</h2>
+                    <h2 className="font-bold text-lg">Total Requests by Form</h2>
                     <BarChart />
                 </div>
 
