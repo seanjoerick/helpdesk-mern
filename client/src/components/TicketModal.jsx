@@ -2,21 +2,25 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-const TicketModal = ({ isOpen, onClose }) => {
-  const [deviceNo, setDeviceNo] = useState("");
-  const [description, setDescription] = useState("");
-  const [formType, setFormType] = useState("Service");
+const TicketModal = ({ onClose, isCreateTicket }) => {
+  const [deviceNo, setDeviceNo] = useState('');
+  const [descriptionProblem, setDescription] = useState('');
+  const [selectedForm, setSelectedForm] = useState('Service');
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Handle form submission here
-    console.log("Device No:", deviceNo);
-    console.log("Description:", description);
-    console.log("Form Type:", formType);
-    onClose(); 
+    
+    const newTicket = {
+      deviceNo,
+      descriptionProblem,
+      formType: selectedForm,
+    };
+    
+    isCreateTicket(newTicket); 
+    setDeviceNo('');
+    setDescription('');
+    setSelectedForm('Service');
   };
-
-  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -38,8 +42,8 @@ const TicketModal = ({ isOpen, onClose }) => {
             </label>
             <select
               id="formType"
-              value={formType}
-              onChange={(e) => setFormType(e.target.value)}
+              value={selectedForm}
+              onChange={(e) => setSelectedForm(e.target.value)}
               className="w-full border border-gray-300 rounded-md shadow-sm p-2"
               required
             >
@@ -76,7 +80,7 @@ const TicketModal = ({ isOpen, onClose }) => {
               id="description"
               placeholder="Description here..."
               required
-              value={description}
+              value={descriptionProblem}
               onChange={(e) => setDescription(e.target.value)}
               className="w-full border border-gray-300 rounded-md shadow-sm p-2"
               rows={6}
@@ -85,7 +89,7 @@ const TicketModal = ({ isOpen, onClose }) => {
           <div className="flex justify-end">
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center"
+              className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-md flex items-center"
             >
               <FontAwesomeIcon icon={faPaperPlane} className="mr-2" />
               Submit

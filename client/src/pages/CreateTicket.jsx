@@ -1,10 +1,41 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
-import TicketModal from "../components/CreateTicketModal"; // Adjust the path according to your folder structure
+import TicketModal from "../components/TicketModal";
+import SuccessModal from "../components/SuccessModal";
 
 export default function CreateTicket() {
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to manage modal visibility
+  const [showTicketModal, setShowTicketModal] = useState(false);
+  const [tickets, setTickets] = useState([]);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+
+  const handleSubmit = async (newTicket) => {
+    try {
+      // Make a POST request to your server
+      const response = await fetch('/server/ticket/create-ticket', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newTicket),
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const result = await response.json();
+      setTickets((prevTickets) => [...prevTickets, result]);
+      setShowTicketModal(false);
+      setSuccessMessage('Ticket created successfully!');
+      setShowSuccessModal(true);
+
+    } catch (error) {
+      setErrorMessage(error.message);
+    }
+  };
 
   return (
     <div className="p-10 max-w-7xl mx-auto">
@@ -13,7 +44,7 @@ export default function CreateTicket() {
         <div className="md:w-1/2 flex flex-col gap-8">
           {/* Create Ticket Button */}
           <button
-            onClick={() => setIsModalOpen(true)} // Open the modal on button click
+            onClick={() => setShowTicketModal(true)}
             className="flex items-center justify-center bg-blue-700 hover:bg-blue-800 text-white py-4 px-6 rounded-lg transition text-xl"
           >
             <FontAwesomeIcon icon={faPlus} className="mr-4 h-8 w-8" />
@@ -95,8 +126,20 @@ export default function CreateTicket() {
         </div>
       </div>
 
-      {/* Ticket Modal */}
-      <TicketModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      {/* Add Ticket Modal */}
+      {showTicketModal && (
+        <TicketModal
+          onClose={() => setShowTicketModal(false)}
+          isCreateTicket={handleSubmit}
+        />
+      )}
+
+      {showSuccessModal && (
+        <SuccessModal
+          onClose={() => setShowSuccessModal(false)}
+          message={successMessage}
+        />
+      )}
     </div>
   );
 }
