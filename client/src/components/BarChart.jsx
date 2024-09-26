@@ -1,22 +1,26 @@
-// BarChart.js
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
+import useTotalForm from '../hooks/useTotalForm';
 
-// Register Chart.js components
 Chart.register(...registerables);
 
 const BarChart = () => {
+  const { totalForm, error, loading } = useTotalForm();
+
+  const labels = Array.isArray(totalForm) ? totalForm.map(item => item._id) : [];
+  const dataValues = Array.isArray(totalForm) ? totalForm.map(item => item.total) : [];
+
   const data = {
-    labels: ['Network', 'Web', 'Service'],
+    labels: labels,
     datasets: [
       {
         label: 'Total Requests',
-        data: [30, 50, 20], // Sample data; replace with your actual values
+        data: dataValues,
         backgroundColor: [
-          'rgba(255, 99, 132, 0.6)', // Network color
-          'rgba(54, 162, 235, 0.6)', // Web color
-          'rgba(255, 206, 86, 0.6)',  // Service color
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
         ],
         borderColor: [
           'rgba(255, 99, 132, 1)',
@@ -36,7 +40,13 @@ const BarChart = () => {
     },
   };
 
-  return <Bar data={data} options={options} />;
+  return (
+    <div>
+      {loading && <p>Loading...</p>} 
+      {error && <p>{error}</p>} 
+      {!loading && !error && <Bar data={data} options={options} />} 
+    </div>
+  );
 };
 
 export default BarChart;

@@ -1,6 +1,7 @@
 import TicketComment from "../models/comment.model.js";
 import Ticket from "../models/ticket.model.js";
 import { errorHandler } from "../utils/error.js";
+import moment from "moment";
 
 export const createTicketComment = async (req, res, next) => {
     const { deviceNo, formType, descriptionProblem } = req.body;
@@ -201,6 +202,58 @@ export const getTotalCompleted = async (req, res, next) => {
         res.status(200).json({
             message: 'Total completed tickets fetched successfully!',
             count: totalCompleted,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const getTotalRequestsByFormType = async (req, res, next) => {
+    try {
+        const totalRequests = await TicketComment.aggregate([
+            {
+                $group: {
+                    _id: '$formType',
+                    total: { $sum: 1 } 
+                }
+            },
+            {
+                $sort: { total: -1 }
+            }
+        ]);
+
+        if (totalRequests.length === 0) {
+            return res.status(200).json({
+                message: 'No requests found for any form type.',
+                data: []
+            });
+        }
+
+        res.status(200).json({
+            message: 'Total requests by form type fetched successfully!',
+            data: totalRequests,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getTotalCommentsThisMonth = async (req, res, next) => {
+    try {
+        const startOfMonth = moment().startOf('month').toDate();
+        const endOfMonth = moment().endOf('month').toDate(); 
+
+        const totalCommentsThisMonth = await TicketComment.countDocuments({
+            createdAt: {
+                $gte: startOfMonth,
+                $lte: endOfMonth,
+            },
+        });
+
+        res.status(200).json({
+            message: 'Total comments for the current month fetched successfully!',
+            total: totalCommentsThisMonth,
         });
     } catch (error) {
         next(error);
