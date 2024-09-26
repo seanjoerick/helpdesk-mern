@@ -6,7 +6,7 @@ const SuccessModal = ({ message, onClose }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
-    }, 1000);
+    }, 300);
     
     return () => clearTimeout(timer);
   }, [onClose]);

@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faSearch } from "@fortawesome/free-solid-svg-icons";
 import TicketModal from "../components/TicketModal";
 import SuccessModal from "../components/SuccessModal";
+import useGetMyTotalCompletedandCounts from "../hooks/useGetMyTotalCompletedandCounts";
+import useGetMyPendingandCounts from "../hooks/useGetMyTotalPendingandCounts";
 
 export default function CreateTicket() {
   const [showTicketModal, setShowTicketModal] = useState(false);
@@ -10,6 +12,8 @@ export default function CreateTicket() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const { completedTickets, completedCount } = useGetMyTotalCompletedandCounts();
+  const { pendingTickets, pendingCount } = useGetMyPendingandCounts();
 
   const handleSubmit = async (newTicket) => {
     try {
@@ -31,7 +35,6 @@ export default function CreateTicket() {
       setShowTicketModal(false);
       setSuccessMessage('Ticket created successfully!');
       setShowSuccessModal(true);
-
     } catch (error) {
       setErrorMessage(error.message);
     }
@@ -81,18 +84,18 @@ export default function CreateTicket() {
         <div className="md:w-1/2 flex flex-col gap-8">
           {/* Card 1 */}
           <div className="bg-[#A3C1DA] text-white p-6 rounded-lg flex-1 text-lg">
-            <h2 className="text-5xl font-bold text-white">100</h2>
+            <h2 className="text-5xl font-bold text-white">{pendingCount}</h2>
             <p className="text-md uppercase">TOTAL PENDING</p>
           </div>
-          {/* Card 2 */}
-          <div className="bg-[#FF6F61] text-white p-6 rounded-lg flex-1 text-lg">
-            <h2 className="text-5xl font-bold">100</h2>
-            <p className="text-md uppercase">TOTAL CONDEMNED</p>
+           {/* Card 2 */}
+           <div className="bg-[#A8E6CE] text-white p-6 rounded-lg flex-1 text-lg">
+            <h2 className="text-5xl font-bold">{completedCount}</h2>
+            <p className="text-md uppercase">TOTAL COMPLETED</p>
           </div>
           {/* Card 3 */}
-          <div className="bg-[#A8E6CE] text-white p-6 rounded-lg flex-1 text-lg">
-            <h2 className="text-5xl font-bold">100</h2>
-            <p className="text-md uppercase">TOTAL COMPLETED</p>
+          <div className="bg-[#FF6F61] text-white p-6 rounded-lg flex-1 text-lg">
+            <h2 className="text-5xl font-bold">0</h2>
+            <p className="text-md uppercase">TOTAL CONDEMNED</p>
           </div>
         </div>
       </div>
@@ -107,7 +110,7 @@ export default function CreateTicket() {
                 <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 uppercase tracking-wider">REQUEST ID</th>
                 <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 uppercase tracking-wider">DEVICE NO.</th>
                 <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 uppercase tracking-wider">STARTED</th>
-                <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 uppercase tracking-wider">ACTION</th>
+                <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 uppercase tracking-wider">COMPLETED BY</th>
               </tr>
             </thead>
             <tbody className="bg-white">
@@ -115,11 +118,7 @@ export default function CreateTicket() {
                 <td className="px-6 py-4 whitespace-nowrap">2024-0001</td>
                 <td className="px-6 py-4 whitespace-nowrap">PJG-LAP-001</td>
                 <td className="px-6 py-4 whitespace-nowrap">03/30/2007</td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <button className="bg-transparent hover:bg-gray-200 rounded-full p-2">
-                    <FontAwesomeIcon icon={faSearch} className="h-6 w-6 text-gray-500" />
-                  </button>
-                </td>
+                <td className="px-6 py-4 whitespace-nowrap">Admin</td>
               </tr>
             </tbody>
           </table>

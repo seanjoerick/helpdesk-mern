@@ -263,47 +263,69 @@ export const getTotalCommentsThisMonth = async (req, res, next) => {
     }
 };
 
-export const getMyPendingTickets = async (req, res, next) => {
+export const getMyPendingTicketsAndCount = async (req, res, next) => {
     const userId = req.user.id;
 
     try {
-        const pendingTickets = await Ticket.find({ 
-            user: userId, 
-            status: 'pending'
-        }).populate({
-            path: 'comments',
-            populate: {
-                path: 'user',
-                select: 'username', 
+        const [pendingTickets, pendingTicketCount] = await Promise.all([
+            Ticket.find({ 
+                user: userId, 
+                status: 'pending'
+            }).populate({
+                path: 'comments',
                 populate: {
-                    path: 'department',
-                    select: 'name'  
+                    path: 'user',
+                    select: 'username', 
+                    populate: {
+                        path: 'department',
+                        select: 'name'  
+                    }
                 }
-            }
-        });
+            }),
+            Ticket.countDocuments({ 
+                user: userId, 
+                status: 'pending'
+            })
+        ]);
 
         res.status(200).json({
-            message: 'My pending tickets fetched successfully!',
+            message: 'Pending tickets and count fetched successfully!',
             tickets: pendingTickets,
+            count: pendingTicketCount,
         });
     } catch (error) {
         next(error);
     }
 };
 
-
-export const getMyPendingTicketsCount = async (req, res, next) => {
-    const userId = req.user.id; 
+export const getMyCompletedTicketsAndCount = async (req, res, next) => {
+    const userId = req.user.id;
 
     try {
-        const pendingTicketCount = await Ticket.countDocuments({ 
-            user: userId, 
-            status: 'pending'
-        });
+        const [completedTickets, completedTicketCount] = await Promise.all([
+            Ticket.find({ 
+                user: userId, 
+                status: 'completed'
+            }).populate({
+                path: 'comments',
+                populate: {
+                    path: 'user',
+                    select: 'username', 
+                }
+            }).populate({
+                path: 'conducted_by', 
+                select: 'username'    
+            }),
+            Ticket.countDocuments({ 
+                user: userId, 
+                status: 'completed'
+            })
+        ]);
 
         res.status(200).json({
-            message: 'Count of my pending tickets fetched successfully!',
-            count: pendingTicketCount, 
+            message: 'Completed tickets and count fetched successfully!',
+            tickets: completedTickets,
+            count: completedTicketCount,
         });
     } catch (error) {
         next(error);
