@@ -15,19 +15,19 @@ const Dashboard = () => {
         <div className="p-4 flex flex-col gap-4">
             {/* Cards Section */}
             <div className="flex flex-wrap justify-between gap-4">
-                <div className="flex-1 bg-[#A3C1DA] p-4 rounded shadow">
+                <div className="flex-1 bg-[#A3C1DA] text-white p-4 rounded shadow">
                     <h3 className="text-lg font-bold">Total Pending</h3>
                     <p className="text-2xl">{totalPending}</p>
                 </div>
-                <div className="flex-1 bg-[#A8E6CE] p-4 rounded shadow">
+                <div className="flex-1 bg-[#A8E6CE] text-white p-4 rounded shadow">
                     <h3 className="text-lg font-bold">Total Completed</h3>
                     <p className="text-2xl">{totalCompleted}</p>
                 </div>
-                <div className="flex-1 bg-[#9B59B6] p-4 rounded shadow">
+                <div className="flex-1 bg-[#9B59B6] text-white p-4 rounded shadow">
                     <h3 className="text-lg font-bold">Total Admin</h3>
                     <p className="text-2xl">{totalAdmin}</p>
                 </div>
-                <div className="flex-1 bg-[#FF6F61] p-4 rounded shadow">
+                <div className="flex-1 bg-[#FF6F61] text-white p-4 rounded shadow">
                     <h3 className="text-lg font-bold">Total Condemned</h3>
                     <p className="text-2xl">1</p>
                 </div>

@@ -21,11 +21,11 @@ const Sidebar = () => {
     } else if (currentUser?.roles.includes('Admin')) {
       setActiveLink('dashboard');
       localStorage.setItem('activeLink', 'dashboard');
-      navigate('/dashboard');  // Automatically navigate to the dashboard after login
+      navigate('/dashboard'); 
     } else if (currentUser?.roles.includes('User')) {
       setActiveLink('createTicket');
       localStorage.setItem('activeLink', 'createTicket');
-      navigate('/createticket');  // Automatically navigate to create ticket for User role
+      navigate('/createticket');  
     }
   }, [currentUser, navigate]);
 
@@ -39,7 +39,7 @@ const Sidebar = () => {
         console.error(data.message);
       } else {
         dispatch(signoutSuccess());
-        localStorage.removeItem('activeLink');  // Clear active link on logout
+        localStorage.removeItem('activeLink'); 
         navigate('/sign-in');
       }
     } catch (error) {
@@ -52,7 +52,7 @@ const Sidebar = () => {
 
   const handleLinkClick = (link, path) => {
     setActiveLink(link);
-    localStorage.setItem('activeLink', link);  // Store the active link in localStorage
+    localStorage.setItem('activeLink', link); 
     navigate(path);
   };
 
@@ -131,7 +131,7 @@ const Sidebar = () => {
               onClick={() => handleLinkClick('createTicket', '/createticket')}
             >
               <FontAwesomeIcon icon={faTicketAlt} />
-              <span className="text-[15px] ml-4">Create Ticket</span>
+              <span className="text-[15px] ml-4">Ticket</span>
             </div>
           </>
         )}
