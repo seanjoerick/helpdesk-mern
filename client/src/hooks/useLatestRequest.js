@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const useLatestRequest = () => {
     const [latestTicket, setLatestTicket] = useState(null); 
-    const [loading, setLoading] = useState(true); 
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null); 
     useEffect(() => {
         const fetchLatestRequest = async () => {

@@ -331,3 +331,39 @@ export const getMyCompletedTicketsAndCount = async (req, res, next) => {
         next(error);
     }
 };
+
+export const getMyLastRequest = async (req, res, next) => {
+    const userId = req.user.id;
+
+    try {
+        const lastTicketRequest = await Ticket.findOne({ 
+            user: userId 
+        })
+        .sort({ updatedAt: -1 })
+        .populate({
+            path: 'comments',
+            populate: {
+                path: 'user',
+                select: 'username', 
+            }
+        })
+        .populate({
+            path: 'conducted_by', 
+            select: 'username'
+        });
+
+        if (!lastTicketRequest) {
+            return res.status(404).json({
+                message: 'No requests found for this user.',
+            });
+        }
+
+        res.status(200).json({
+            message: 'Last request fetched successfully!',
+            ticket: lastTicketRequest,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+

@@ -1,6 +1,6 @@
 import express from 'express';
 import { isAdmin, verifyToken } from '../utils/verifiedUser.js';
-import { createTicketComment, getAllTicketComments, getAllTickets, getLatestRequest, getMyCompletedTicketsAndCount, getMyPendingTicketsAndCount, getTotalCommentsThisMonth, getTotalCompleted, getTotalPending, getTotalRequestsByFormType, takeActionOnTicket, takeActionOnTicketCompleted } from '../controllers/ticket.controller.js';
+import { createTicketComment, getAllTicketComments, getAllTickets, getLatestRequest, getMyCompletedTicketsAndCount, getMyLastRequest, getMyPendingTicketsAndCount, getTotalCommentsThisMonth, getTotalCompleted, getTotalPending, getTotalRequestsByFormType, takeActionOnTicket, takeActionOnTicketCompleted } from '../controllers/ticket.controller.js';
 
 const router = express.Router();
 
@@ -23,6 +23,7 @@ router.get('/tickets/totalcomments/monthly', getTotalCommentsThisMonth);
 
 router.get('/tickets/getmypendings-counts', verifyToken, getMyPendingTicketsAndCount);
 router.get('/tickets/getmycompleted-counts', verifyToken, getMyCompletedTicketsAndCount);
+router.get('/tickets/getmylastrequest', verifyToken, getMyLastRequest);
 
 
 export default router;

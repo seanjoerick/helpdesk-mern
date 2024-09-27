@@ -5,6 +5,7 @@ import TicketModal from "../components/TicketModal";
 import SuccessModal from "../components/SuccessModal";
 import useGetMyTotalCompletedandCounts from "../hooks/useGetMyTotalCompletedandCounts";
 import useGetMyPendingandCounts from "../hooks/useGetMyTotalPendingandCounts";
+import useGetMyLastRequest from "../hooks/useGetMyLastRequest";
 
 export default function CreateTicket() {
   const [showTicketModal, setShowTicketModal] = useState(false);
@@ -14,10 +15,10 @@ export default function CreateTicket() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const { completedTickets, completedCount } = useGetMyTotalCompletedandCounts();
   const { pendingTickets, pendingCount } = useGetMyPendingandCounts();
+  const { lastRequest, loading: loadingLastRequest, error: lastRequestError } = useGetMyLastRequest();
 
   const handleSubmit = async (newTicket) => {
     try {
-      // Make a POST request to your server
       const response = await fetch('/server/ticket/create-ticket', {
         method: 'POST',
         headers: {
@@ -54,45 +55,48 @@ export default function CreateTicket() {
             CREATE TICKET
           </button>
 
-          {/* In Process Request and Last Request in a row */}
+          {/* In Process Request and Last Request */}
           <div className="flex flex-col md:flex-row gap-8 h-full">
-            {/* In Process Request */}
-            <div>
-              <div className="p-6">
-                <h3 className="font-semibold mb-4 text-xl">IN PROCESS REQUEST</h3>
-                <p className="mb-2"><span className="font-semibold">Device No.:</span> LAP-001</p>
-                <p className="mb-2"><span className="font-semibold">Request Form:</span> Service Request</p>
-                <p className="mb-2"><span className="font-semibold">Description:</span> Expired MS Office</p>
-                <p><span className="font-semibold">Date Start:</span> March 01, 2024</p>
-              </div>
-            </div>
-
             {/* Last Request */}
-            <div>
-              <div className="p-6">
-                <h3 className="font-semibold mb-4 text-xl">LAST REQUEST</h3>
-                <p className="mb-2"><span className="font-semibold">Device No.:</span> LAP-001</p>
-                <p className="mb-2"><span className="font-semibold">Request Form:</span> Service Request</p>
-                <p className="mb-2"><span className="font-semibold">Description:</span> Expired MS Office</p>
-                <p><span className="font-semibold">Date Requested:</span> March 01, 2024</p>
-              </div>
+            <div className="p-6">
+              <h3 className="font-semibold mb-4 text-xl">LAST REQUEST</h3>
+              {loadingLastRequest ? (
+                <p>Loading...</p>
+              ) : lastRequestError ? (
+                <p>Error: {lastRequestError}</p>
+              ) : lastRequest ? (
+                <>
+                  <p className="mb-2"><span className="font-semibold">Request No.:</span> {lastRequest.requestNo}</p>
+                  <p className="mb-2"><span className="font-semibold">Device No.:</span> {lastRequest.comments[0].deviceNo}</p>
+                  <p className="mb-2"><span className="font-semibold">Request Form:</span> {lastRequest.comments[0].formType}</p>
+                  <p className="mb-2"><span className="font-semibold">Description:</span> {lastRequest.comments[0].descriptionProblem}</p>
+                  <p className="mb-2"><span className="font-semibold">Date Requested:</span> {new Date(lastRequest.comments[0].createdAt).toLocaleString()}</p>
+
+                  {/* Status Text with Color */}
+                  <p className="mb-2">
+                    <span className="font-semibold">Status:</span>{" "}
+                    <span className={`font-medium ${lastRequest.status === 'ongoing' ? 'text-green-500' : 'text-yellow-500'}`}>
+                      {lastRequest.status.charAt(0).toUpperCase() + lastRequest.status.slice(1).toLowerCase()}
+                    </span>
+                  </p>
+                </>
+              ) : (
+                <p>No last request found.</p>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Right Column: Cards in a column */}
+        {/* Right Column: Cards */}
         <div className="md:w-1/2 flex flex-col gap-8">
-          {/* Card 1 */}
           <div className="bg-[#A3C1DA] text-white p-6 rounded-lg flex-1 text-lg">
             <h2 className="text-5xl font-bold text-white">{pendingCount}</h2>
             <p className="text-md uppercase">TOTAL PENDING</p>
           </div>
-           {/* Card 2 */}
-           <div className="bg-[#A8E6CE] text-white p-6 rounded-lg flex-1 text-lg">
+          <div className="bg-[#A8E6CE] text-white p-6 rounded-lg flex-1 text-lg">
             <h2 className="text-5xl font-bold">{completedCount}</h2>
             <p className="text-md uppercase">TOTAL COMPLETED</p>
           </div>
-          {/* Card 3 */}
           <div className="bg-[#FF6F61] text-white p-6 rounded-lg flex-1 text-lg">
             <h2 className="text-5xl font-bold">0</h2>
             <p className="text-md uppercase">TOTAL CONDEMNED</p>
@@ -100,26 +104,55 @@ export default function CreateTicket() {
         </div>
       </div>
 
-      {/* Finished Request at the bottom, full width */}
+      {/* Finished Request Table */}
       <div className="bg-white rounded-lg overflow-hidden mt-8">
         <div className="p-6">
           <h3 className="font-semibold mb-6 text-xl">Finished Request</h3>
           <table className="min-w-full">
             <thead>
               <tr>
-                <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 uppercase tracking-wider">REQUEST ID</th>
                 <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 uppercase tracking-wider">DEVICE NO.</th>
                 <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 uppercase tracking-wider">STARTED</th>
+                <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 uppercase tracking-wider">Action Taken</th>
+                <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 uppercase tracking-wider">DATE COMPLETED</th>
                 <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 uppercase tracking-wider">COMPLETED BY</th>
+                <th className="px-6 py-4 text-left text-sm font-medium text-gray-700 uppercase tracking-wider">Action</th>
               </tr>
             </thead>
             <tbody className="bg-white">
-              <tr>
-                <td className="px-6 py-4 whitespace-nowrap">2024-0001</td>
-                <td className="px-6 py-4 whitespace-nowrap">PJG-LAP-001</td>
-                <td className="px-6 py-4 whitespace-nowrap">03/30/2007</td>
-                <td className="px-6 py-4 whitespace-nowrap">Admin</td>
-              </tr>
+              {completedTickets.map((ticket) => (
+                <tr key={ticket._id}>
+                  <td className="px-6 py-4 whitespace-nowrap">{ticket.comments[0]?.deviceNo}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {ticket.comments[0]?.updatedAt ? new Date(ticket.comments[0].updatedAt).toLocaleString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true
+                    }).replace(',', '') : 'N/A'}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">{ticket.action_taken}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {ticket.updatedAt ? new Date(ticket.updatedAt).toLocaleString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      hour12: true
+                    }).replace(',', '') : 'N/A'}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">{ticket.conducted_by?.username}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <button className="text-blue-500 hover:underline">
+                      <FontAwesomeIcon icon={faSearch} className="mr-2" />
+                      Search
+                    </button>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

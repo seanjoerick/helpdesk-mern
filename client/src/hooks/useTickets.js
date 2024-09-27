@@ -18,11 +18,14 @@ const useTickets = () => {
             }
         };
 
-        fetchTickets();
+        const intervalId = setInterval(() => {
+            fetchTickets();
+        }, 500);
+
+        return () => clearInterval(intervalId);
     }, []); 
 
-    return { tickets, setTickets,loading, error };
+    return { tickets, setTickets, loading, error };
 };
 
 export default useTickets;
-
