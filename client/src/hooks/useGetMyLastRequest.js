@@ -10,9 +10,21 @@ const useGetMyLastRequest = () => {
     const fetchLastRequest = async () => {
       try {
         const response = await axios.get('/server/ticket/tickets/getmylastrequest');
-        setLastRequest(response.data.ticket);  // Adjusted to access the 'ticket' field
+        setLastRequest(response.data.ticket);
       } catch (err) {
-        setError(err.message);
+        if (err.response) {
+          // If the error response exists, check the status
+          if (err.response.status === 404) {
+            // Custom error message for 404
+            setError("No requests found for this user.");
+          } else {
+            // General error message for other statuses
+            setError(err.response.data.message || "An error occurred while fetching the last request.");
+          }
+        } else {
+          // If no response is available, set the error message to the default message
+          setError("An error occurred while fetching the last request.");
+        }
       } finally {
         setLoading(false);
       }

@@ -72,6 +72,7 @@ const SignIn = () => {
                                     placeholder="name@gmail.com"
                                     onChange={handleChange}
                                     required
+                                    autoComplete="nope"
                                 />
                             </div>
 

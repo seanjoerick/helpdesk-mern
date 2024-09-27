@@ -106,7 +106,7 @@ export default function Tickets() {
                                         }).replace(',', '')} 
                                     </td>
                                     <td className="px-6 py-4">{ticket.conducted_by?.username}</td>
-                                    <td className="px-6 py-4">{ticket.comments[0]?.descriptionProblem || 'N/A'}</td>
+                                    <td className="px-6 py-4">{ticket.action_taken}</td>
                                 </tr>
                             ))
                         ) : (

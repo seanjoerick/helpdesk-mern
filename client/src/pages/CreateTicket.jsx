@@ -63,7 +63,11 @@ export default function CreateTicket() {
               {loadingLastRequest ? (
                 <p>Loading...</p>
               ) : lastRequestError ? (
-                <p>Error: {lastRequestError}</p>
+                lastRequestError.response?.status === 404 ? (
+                  <p>{lastRequestError.response.data.message}</p> // Custom error message for 404
+                ) : (
+                  <p>Error: {lastRequestError.message}</p> // General error message
+                )
               ) : lastRequest ? (
                 <>
                   <p className="mb-2"><span className="font-semibold">Request No.:</span> {lastRequest.requestNo}</p>
@@ -81,7 +85,7 @@ export default function CreateTicket() {
                   </p>
                 </>
               ) : (
-                <p>No last request found.</p>
+                <p>No last request found.</p> // Message for no last request
               )}
             </div>
           </div>
