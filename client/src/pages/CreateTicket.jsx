@@ -64,9 +64,9 @@ export default function CreateTicket() {
                 <p>Loading...</p>
               ) : lastRequestError ? (
                 lastRequestError.response?.status === 404 ? (
-                  <p>{lastRequestError.response.data.message}</p> // Custom error message for 404
+                  <p>{lastRequestError.response.data.message}</p> 
                 ) : (
-                  <p>Error: {lastRequestError.message}</p> // General error message
+                  <p>Error: {lastRequestError.message}</p> 
                 )
               ) : lastRequest ? (
                 <>
@@ -79,13 +79,13 @@ export default function CreateTicket() {
                   {/* Status Text with Color */}
                   <p className="mb-2">
                     <span className="font-semibold">Status:</span>{" "}
-                    <span className={`font-medium ${lastRequest.status === 'ongoing' ? 'text-green-500' : 'text-yellow-500'}`}>
+                    <span className={`font-medium ${lastRequest.status === 'completed' ? 'text-green-500' : 'text-yellow-500'}`}>
                       {lastRequest.status.charAt(0).toUpperCase() + lastRequest.status.slice(1).toLowerCase()}
                     </span>
                   </p>
                 </>
               ) : (
-                <p>No last request found.</p> // Message for no last request
+                <p>No last request found.</p> 
               )}
             </div>
           </div>
