@@ -31,4 +31,4 @@ Firebase Authentication
 JWT for secure access tokens
 MVC Architecture for clean code structure
 Demo
-🎥 Watch the live demo: Helpdesk Ticketing System Demo
+🎥 Watch the youtube demo: https://youtu.be/0B1anQbQNCE
